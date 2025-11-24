@@ -1,17 +1,20 @@
 'use client'
 
-import { Header } from '@/components/ecommerce/Header'
-import { Footer } from '@/components/ecommerce/Footer'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
 import { useCart } from '@/contexts/CartContext'
-import { ArrowLeft, Plus, Minus, Trash2, ShoppingCart } from 'lucide-react'
+import { ArrowLeft, Plus, Minus, Trash2, ShoppingCart, Tag, X } from 'lucide-react'
 import Link from 'next/link'
+import { toast } from 'sonner'
 
 export default function CartPage() {
-  const { cart, updateQuantity, removeItem } = useCart()
+  const { cart, updateQuantity, removeItem, applyCoupon, removeCoupon } = useCart()
+  const [couponCode, setCouponCode] = useState('')
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false)
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('es-AR', {
@@ -20,15 +23,80 @@ export default function CartPage() {
     }).format(price)
   }
 
-  const shippingCost = cart.total > 50000 ? 0 : 5000
+  // Calculate discount
+  let discountAmount = 0
+  if (cart.coupon) {
+    if (cart.coupon.discountType === 'percentage') {
+      discountAmount = Math.round((cart.total * cart.coupon.discountValue) / 100)
+    } else if (cart.coupon.discountType === 'fixed') {
+      discountAmount = cart.coupon.discountValue
+    }
+  }
+
+  // Calculate shipping (free if over 50000 or coupon applies)
+  const isFreeShipping = cart.total > 50000 || cart.coupon?.discountType === 'free_shipping'
+  const shippingCost = isFreeShipping ? 0 : 5000
+
   const tax = Math.round(cart.total * 0.21) // 21% IVA
-  const finalTotal = cart.total + shippingCost + tax
+  const finalTotal = cart.total - discountAmount + shippingCost + tax
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      toast.error('Por favor ingresa un código de cupón')
+      return
+    }
+
+    setIsApplyingCoupon(true)
+
+    try {
+      // Simular llamada a API - en producción llamarías a /api/coupons/validate
+      // Por ahora usamos cupones hardcodeados para demo
+      const validCoupons: Record<string, any> = {
+        'BIENVENIDO15': {
+          code: 'BIENVENIDO15',
+          discountType: 'percentage',
+          discountValue: 15,
+          discountAmount: 0, // Se calculará
+        },
+        'ENVIOGRATIS': {
+          code: 'ENVIOGRATIS',
+          discountType: 'free_shipping',
+          discountValue: 0,
+          discountAmount: 0,
+        },
+        'DESCUENTO5000': {
+          code: 'DESCUENTO5000',
+          discountType: 'fixed',
+          discountValue: 5000,
+          discountAmount: 0,
+        },
+      }
+
+      const coupon = validCoupons[couponCode.toUpperCase()]
+
+      if (!coupon) {
+        toast.error('Cupón inválido o expirado')
+        return
+      }
+
+      applyCoupon(coupon)
+      toast.success('¡Cupón aplicado correctamente!')
+      setCouponCode('')
+    } catch (error) {
+      toast.error('Error al aplicar el cupón')
+    } finally {
+      setIsApplyingCoupon(false)
+    }
+  }
+
+  const handleRemoveCoupon = () => {
+    removeCoupon()
+    toast.success('Cupón removido')
+  }
 
   if (cart.items.length === 0) {
     return (
-      <>
-        <Header />
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
             <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-6" />
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Tu carrito está vacío</h1>
@@ -41,16 +109,11 @@ export default function CartPage() {
             </Button>
           </div>
         </div>
-        <Footer />
-      </>
     )
   }
 
   return (
-    <>
-      <Header />
-      
-      <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8">
@@ -173,14 +236,78 @@ export default function CartPage() {
                     <span>{formatPrice(cart.total)}</span>
                   </div>
 
+                  {/* Coupon Section */}
+                  {cart.coupon ? (
+                    <div className="bg-green-50 p-3 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <Tag className="w-4 h-4 text-green-600" />
+                          <span className="text-sm font-medium text-green-800">
+                            Cupón: {cart.coupon.code}
+                          </span>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleRemoveCoupon}
+                          className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-green-700">
+                          Descuento
+                          {cart.coupon.discountType === 'percentage' && ` (${cart.coupon.discountValue}%)`}
+                          {cart.coupon.discountType === 'free_shipping' && ' (Envío gratis)'}
+                        </span>
+                        <span className="font-medium text-green-800">
+                          {cart.coupon.discountType !== 'free_shipping'
+                            ? `-${formatPrice(discountAmount)}`
+                            : 'Aplicado'
+                          }
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">¿Tenés un cupón?</label>
+                      <div className="flex gap-2">
+                        <Input
+                          type="text"
+                          placeholder="Código de cupón"
+                          value={couponCode}
+                          onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                          onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                          className="uppercase"
+                        />
+                        <Button
+                          onClick={handleApplyCoupon}
+                          disabled={isApplyingCoupon || !couponCode.trim()}
+                          variant="outline"
+                        >
+                          {isApplyingCoupon ? 'Aplicando...' : 'Aplicar'}
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Cupones disponibles: BIENVENIDO15, ENVIOGRATIS, DESCUENTO5000
+                      </p>
+                    </div>
+                  )}
+
                   {/* Shipping */}
                   <div className="flex justify-between text-sm">
                     <span>Envío</span>
                     <div className="text-right">
-                      {shippingCost === 0 ? (
+                      {isFreeShipping ? (
                         <div>
                           <Badge variant="secondary" className="text-xs mb-1">¡Gratis!</Badge>
-                          <div className="text-xs text-gray-500">Por compra superior a $50,000</div>
+                          <div className="text-xs text-gray-500">
+                            {cart.coupon?.discountType === 'free_shipping'
+                              ? 'Por cupón'
+                              : 'Por compra superior a $50,000'
+                            }
+                          </div>
                         </div>
                       ) : (
                         <div>
@@ -208,7 +335,7 @@ export default function CartPage() {
                   </div>
 
                   {/* Progress to Free Shipping */}
-                  {cart.total < 50000 && (
+                  {cart.total < 50000 && !cart.coupon && (
                     <div className="bg-blue-50 p-3 rounded-lg">
                       <div className="text-sm text-blue-800 mb-2">
                         Agrega {formatPrice(50000 - cart.total)} más para obtener envío gratis
@@ -248,8 +375,5 @@ export default function CartPage() {
           </div>
         </div>
       </div>
-
-      <Footer />
-    </>
   )
 }

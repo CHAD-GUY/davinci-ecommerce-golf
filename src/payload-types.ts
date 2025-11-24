@@ -72,6 +72,8 @@ export interface Config {
     categories: Category;
     products: Product;
     orders: Order;
+    coupons: Coupon;
+    'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -83,6 +85,8 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
+    coupons: CouponsSelect<false> | CouponsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -186,7 +190,7 @@ export interface Product {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -297,6 +301,21 @@ export interface Order {
     id?: string | null;
   }[];
   subtotal: number;
+  coupon?: {
+    /**
+     * Código del cupón aplicado
+     */
+    code?: string | null;
+    discountType?: ('percentage' | 'fixed' | 'free_shipping') | null;
+    /**
+     * Valor del descuento aplicado
+     */
+    discountValue?: number | null;
+    /**
+     * Monto total descontado
+     */
+    discountAmount?: number | null;
+  };
   shipping: number;
   tax: number;
   total: number;
@@ -309,6 +328,73 @@ export interface Order {
   notes?: string | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "coupons".
+ */
+export interface Coupon {
+  id: number;
+  /**
+   * Código del cupón (ej: BIENVENIDO15, ENVIOGRATIS)
+   */
+  code: string;
+  /**
+   * Descripción del cupón para mostrar al usuario
+   */
+  description: string;
+  discountType: 'percentage' | 'fixed' | 'free_shipping';
+  /**
+   * Valor del descuento (porcentaje o monto en pesos)
+   */
+  discountValue?: number | null;
+  /**
+   * Monto mínimo de compra para aplicar el cupón (opcional)
+   */
+  minimumPurchase?: number | null;
+  /**
+   * Cantidad máxima de usos del cupón (dejar vacío para ilimitado)
+   */
+  usageLimit?: number | null;
+  /**
+   * Cantidad de veces que se usó el cupón
+   */
+  usageCount?: number | null;
+  /**
+   * Fecha desde la cual el cupón es válido
+   */
+  validFrom: string;
+  /**
+   * Fecha hasta la cual el cupón es válido (opcional)
+   */
+  validUntil?: string | null;
+  /**
+   * Si el cupón está activo y puede ser usado
+   */
+  active?: boolean | null;
+  /**
+   * Mostrar este cupón en el sitio público
+   */
+  showOnSite?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: number;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -336,6 +422,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'orders';
         value: number | Order;
+      } | null)
+    | ({
+        relationTo: 'coupons';
+        value: number | Coupon;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -525,6 +615,14 @@ export interface OrdersSelect<T extends boolean = true> {
         id?: T;
       };
   subtotal?: T;
+  coupon?:
+    | T
+    | {
+        code?: T;
+        discountType?: T;
+        discountValue?: T;
+        discountAmount?: T;
+      };
   shipping?: T;
   tax?: T;
   total?: T;
@@ -534,6 +632,33 @@ export interface OrdersSelect<T extends boolean = true> {
   notes?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "coupons_select".
+ */
+export interface CouponsSelect<T extends boolean = true> {
+  code?: T;
+  description?: T;
+  discountType?: T;
+  discountValue?: T;
+  minimumPurchase?: T;
+  usageLimit?: T;
+  usageCount?: T;
+  validFrom?: T;
+  validUntil?: T;
+  active?: T;
+  showOnSite?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

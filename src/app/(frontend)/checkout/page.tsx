@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Header } from '@/components/ecommerce/Header'
-import { Footer } from '@/components/ecommerce/Footer'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -56,9 +54,22 @@ export default function CheckoutPage() {
     }).format(price)
   }
 
-  const shippingCost = cart.total > 50000 ? 0 : 5000
+  // Calculate discount
+  let discountAmount = 0
+  if (cart.coupon) {
+    if (cart.coupon.discountType === 'percentage') {
+      discountAmount = Math.round((cart.total * cart.coupon.discountValue) / 100)
+    } else if (cart.coupon.discountType === 'fixed') {
+      discountAmount = cart.coupon.discountValue
+    }
+  }
+
+  // Calculate shipping (free if over 50000 or coupon applies)
+  const isFreeShipping = cart.total > 50000 || cart.coupon?.discountType === 'free_shipping'
+  const shippingCost = isFreeShipping ? 0 : 5000
+
   const tax = Math.round(cart.total * 0.21) // 21% IVA
-  const finalTotal = cart.total + shippingCost + tax
+  const finalTotal = cart.total - discountAmount + shippingCost + tax
 
   const onSubmit = async (data: CheckoutFormData) => {
     setIsProcessing(true)
@@ -85,9 +96,7 @@ export default function CheckoutPage() {
 
   if (cart.items.length === 0 && !orderCompleted) {
     return (
-      <>
-        <Header />
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Tu carrito está vacío</h1>
             <p className="text-gray-600 mb-6">Agrega algunos productos antes de proceder al checkout</p>
@@ -99,16 +108,12 @@ export default function CheckoutPage() {
             </Button>
           </div>
         </div>
-        <Footer />
-      </>
     )
   }
 
   if (orderCompleted) {
     return (
-      <>
-        <Header />
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <Card className="w-full max-w-md">
             <CardContent className="pt-6 text-center">
               <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
@@ -134,16 +139,11 @@ export default function CheckoutPage() {
             </CardContent>
           </Card>
         </div>
-        <Footer />
-      </>
     )
   }
 
   return (
-    <>
-      <Header />
-      
-      <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8">
@@ -296,13 +296,41 @@ export default function CheckoutPage() {
                       </TabsContent>
 
                       <TabsContent value="transfer" className="mt-4">
-                        <div className="p-4 bg-green-50 rounded-lg">
+                        <div className="p-4 bg-green-50 rounded-lg space-y-3">
                           <div className="flex items-center gap-2 mb-2">
                             <CreditCard className="w-5 h-5 text-green-600" />
                             <span className="font-medium">Transferencia Bancaria</span>
                           </div>
-                          <p className="text-sm text-gray-600">
-                            Te enviaremos los datos bancarios para realizar la transferencia.
+                          <p className="text-sm text-gray-600 mb-3">
+                            Realiza la transferencia a la siguiente cuenta bancaria:
+                          </p>
+
+                          <div className="bg-white p-3 rounded border border-green-200 space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Banco:</span>
+                              <span className="font-medium">Banco Galicia</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Titular:</span>
+                              <span className="font-medium">Davinci Store S.A.</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">CUIT:</span>
+                              <span className="font-mono">30-12345678-9</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">CBU:</span>
+                              <span className="font-mono">0070999530000012345678</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Alias:</span>
+                              <span className="font-medium">DAVINCI.STORE</span>
+                            </div>
+                          </div>
+
+                          <p className="text-xs text-green-700 mt-2">
+                            💡 Una vez realizada la transferencia, envía el comprobante a{' '}
+                            <strong>pagos@davincistore.com</strong> con tu número de orden.
                           </p>
                         </div>
                       </TabsContent>
@@ -381,11 +409,22 @@ export default function CheckoutPage() {
                       <span>Subtotal</span>
                       <span>{formatPrice(cart.total)}</span>
                     </div>
+
+                    {/* Show coupon discount if applied */}
+                    {cart.coupon && discountAmount > 0 && (
+                      <div className="flex justify-between text-sm text-green-600">
+                        <span>Descuento ({cart.coupon.code})</span>
+                        <span>-{formatPrice(discountAmount)}</span>
+                      </div>
+                    )}
+
                     <div className="flex justify-between text-sm">
                       <span>Envío</span>
                       <span>
-                        {shippingCost === 0 ? (
-                          <Badge variant="secondary" className="text-xs">Gratis</Badge>
+                        {isFreeShipping ? (
+                          <Badge variant="secondary" className="text-xs">
+                            Gratis {cart.coupon?.discountType === 'free_shipping' && '(Cupón)'}
+                          </Badge>
                         ) : (
                           formatPrice(shippingCost)
                         )}
@@ -408,13 +447,21 @@ export default function CheckoutPage() {
                     className="w-full"
                     size="lg"
                   >
-                    {isProcessing ? 'Procesando...' : `Pagar ${formatPrice(finalTotal)}`}
+                    {isProcessing ? 'Procesando...' : `Confirmar Pedido - ${formatPrice(finalTotal)}`}
                   </Button>
 
-                  {cart.total > 50000 && (
+                  {isFreeShipping && (
                     <div className="text-center">
                       <Badge variant="secondary" className="text-xs">
                         🎉 ¡Envío gratis aplicado!
+                      </Badge>
+                    </div>
+                  )}
+
+                  {cart.coupon && (
+                    <div className="text-center">
+                      <Badge className="text-xs bg-green-600">
+                        ✓ Cupón {cart.coupon.code} aplicado
                       </Badge>
                     </div>
                   )}
@@ -424,8 +471,5 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
-
-      <Footer />
-    </>
   )
 }

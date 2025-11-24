@@ -1,120 +1,203 @@
-import Link from 'next/link'
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react'
+'use client'
+
+import { useRef, CSSProperties } from 'react'
+import { gsap } from 'gsap'
+import { useGSAP } from '@gsap/react'
 
 export function Footer() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const duplicateRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    if (!sectionRef.current || !duplicateRef.current) return
+
+    // Modifies the CSS variable --xpercent
+    const xTo = gsap.quickTo(duplicateRef.current, '--xpercent', {
+      duration: 0.4, // Changes over 0.4s
+      ease: 'back', // With a slight bounce at the end of the movement
+    })
+
+    // Modifies the CSS variable --ypercent
+    const yTo = gsap.quickTo(duplicateRef.current, '--ypercent', {
+      duration: 0.4, // Changes over 0.4s
+      ease: 'back', // With a slight bounce at the end of the movement
+    })
+
+    const handleMouseMove = (e: MouseEvent) => {
+      // Maps the mouse's X position from the window width range (0 to innerWidth)
+      // to a normalized range (0 to 100)
+      const mRangeX = gsap.utils.mapRange(0, window.innerWidth, 0, 100, e.clientX)
+
+      // Update the X position smoothly
+      xTo(mRangeX)
+
+      // Maps the mouse's Y position relative to the element's bounding box
+      // to a normalized range (0 to 100)
+      const bound = (e.target as HTMLElement).getBoundingClientRect()
+      const mRangeY = gsap.utils.mapRange(bound.top, bound.top + bound.height, 0, 100, e.clientY)
+
+      // Update the Y position smoothly
+      yTo(mRangeY)
+    }
+
+    sectionRef.current.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      sectionRef.current?.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, [])
+
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div>
-            <h3 className="text-lg font-bold mb-4">Davinci Store</h3>
-            <p className="text-gray-400 mb-4">
-              Tu tienda online de confianza para ropa y accesorios de la mejor calidad.
-            </p>
-            <div className="flex space-x-4">
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook className="w-5 h-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Instagram className="w-5 h-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Twitter className="w-5 h-5" />
-              </Link>
+    <section ref={sectionRef} className="relative bg-foreground text-background ">
+      <div className="relative">
+        <div className="relative pointer-events-none">
+          {/* Original Container */}
+          <div className="relative px-[25px] h-screen flex flex-col justify-end">
+            {/* Header */}
+            <div className="flex justify-between w-full py-[25px]">
+              <p className="uppercase tracking-[-0.01em] text-base">MNR Studio®</p>
+              <p className="uppercase tracking-[-0.01em] text-base">Work, Infos</p>
+              <p className="uppercase tracking-[-0.01em] text-base">05:05</p>
+              <p className="uppercase tracking-[-0.01em] text-base">Contact</p>
+            </div>
+
+            <div>
+              {/* Line 1 */}
+              <div className="flex items-center justify-between">
+                <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase -ml-[0.07em]">
+                  Fancy a cool
+                </p>
+              </div>
+
+              {/* Line 2 */}
+              <div className="flex items-center justify-between">
+                <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase -ml-[0.07em]">
+                  Hello
+                </p>
+                <img
+                  className="w-[11.2vw] aspect-[1.5] object-cover -translate-y-[5%] rounded-[0.5vw]"
+                  src="/scroll/1.png"
+                  alt=""
+                />
+                <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase">
+                  website?
+                </p>
+              </div>
+
+              {/* Line 3 */}
+              <div className="flex items-center justify-between">
+                <svg
+                  className="w-[7.8vw] h-auto"
+                  fill="none"
+                  height="115"
+                  viewBox="0 0 118 115"
+                  width="118"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g fill="currentColor">
+                    <path d="m76.5346 31.8467 41.4654 41.5767-41.4654 41.5766h-18.429l33.9984-34.0896h-92.0658671v-14.974h92.0658671l-33.9984-34.0897z" />
+                    <path d="m.00000377 80.7447-.00000377-80.74469922 14.6416-.00000078v80.7447z" />
+                  </g>
+                </svg>
+
+                <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase">
+                  @mnr.studio
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="relative flex justify-between w-full py-[25px] mt-[50px] border-t border-background/50">
+              <p className="uppercase tracking-[-0.01em] text-base text-background/50">Instagram</p>
+              <p className="uppercase tracking-[-0.01em] text-base text-background/50">Bluesky</p>
+              <p className="uppercase tracking-[-0.01em] text-base text-background/50">
+                (212) 555 7890
+              </p>
+              <p className="uppercase tracking-[-0.01em] text-base text-background/50">København</p>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold mb-4">Enlaces Rápidos</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/products" className="text-gray-400 hover:text-white transition-colors">
-                  Productos
-                </Link>
-              </li>
-              <li>
-                <Link href="/categories" className="text-gray-400 hover:text-white transition-colors">
-                  Categorías
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
-                  Nosotros
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
-                  Contacto
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Duplicate Container with Mask Effect */}
+          <div
+            ref={duplicateRef}
+            className="absolute top-0 left-0 w-full text-[#8B5B29] px-[25px] h-screen flex flex-col justify-end"
+            style={
+              {
+                '--xpercent': '50%',
+                '--ypercent': '50%',
+                maskImage:
+                  'radial-gradient(circle at var(--xpercent) var(--ypercent), #000 20%, transparent 25%)',
+                WebkitMaskImage:
+                  'radial-gradient(circle at var(--xpercent) var(--ypercent), #000 20%, transparent 25%)',
+              } as CSSProperties
+            }
+            aria-hidden="true"
+          >
+            {/* Header */}
+            <div className="flex justify-between w-full py-[25px]">
+              <p className="uppercase tracking-[-0.01em] text-base">MNR Studio®</p>
+              <p className="uppercase tracking-[-0.01em] text-base">Work, Infos</p>
+              <p className="uppercase tracking-[-0.01em] text-base">05:05</p>
+              <p className="uppercase tracking-[-0.01em] text-base">Contact</p>
+            </div>
 
-          {/* Customer Service */}
-          <div>
-            <h4 className="font-semibold mb-4">Atención al Cliente</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/faq" className="text-gray-400 hover:text-white transition-colors">
-                  Preguntas Frecuentes
-                </Link>
-              </li>
-              <li>
-                <Link href="/shipping" className="text-gray-400 hover:text-white transition-colors">
-                  Envíos
-                </Link>
-              </li>
-              <li>
-                <Link href="/returns" className="text-gray-400 hover:text-white transition-colors">
-                  Devoluciones
-                </Link>
-              </li>
-              <li>
-                <Link href="/size-guide" className="text-gray-400 hover:text-white transition-colors">
-                  Guía de Tallas
-                </Link>
-              </li>
-            </ul>
-          </div>
+            <div>
+              {/* Line 1 */}
+              <div className="flex items-center justify-between">
+                <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase -ml-[0.07em]">
+                  Fancy a cool
+                </p>
+              </div>
 
-          {/* Contact Info */}
-          <div>
-            <h4 className="font-semibold mb-4">Contacto</h4>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-400">info@davincistore.com</span>
+              {/* Line 2 */}
+              <div className="flex items-center justify-between">
+                <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase -ml-[0.07em]">
+                  Hello
+                </p>
+                <img
+                  className="w-[11.2vw] aspect-[1.5] object-cover -translate-y-[5%] rounded-[0.5vw]"
+                  src="/scroll/2.png"
+                  alt=""
+                />
+                <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase">
+                  website?
+                </p>
               </div>
-              <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-400">+54 11 1234-5678</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-400">Buenos Aires, Argentina</span>
+
+              {/* Line 3 */}
+              <div className="flex items-center justify-between">
+                <svg
+                  className="w-[7.8vw] h-auto"
+                  fill="none"
+                  height="115"
+                  viewBox="0 0 118 115"
+                  width="118"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g fill="currentColor">
+                    <path d="m76.5346 31.8467 41.4654 41.5767-41.4654 41.5766h-18.429l33.9984-34.0896h-92.0658671v-14.974h92.0658671l-33.9984-34.0897z" />
+                    <path d="m.00000377 80.7447-.00000377-80.74469922 14.6416-.00000078v80.7447z" />
+                  </g>
+                </svg>
+
+                <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase">
+                  @mnr.studio
+                </p>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
-              © 2024 Davinci Store. Todos los derechos reservados.
-            </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
-                Política de Privacidad
-              </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
-                Términos de Uso
-              </Link>
+            {/* Footer */}
+            <div className="relative flex justify-between w-full py-[25px] mt-[50px] border-t border-[#8B5B29]/50">
+              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">Instagram</p>
+              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">Bluesky</p>
+              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">
+                (212) 555 7890
+              </p>
+              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">København</p>
             </div>
           </div>
         </div>
       </div>
-    </footer>
+    </section>
   )
 }

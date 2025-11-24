@@ -175,6 +175,45 @@ export const Orders: CollectionConfig = {
       },
     },
     {
+      name: 'coupon',
+      type: 'group',
+      fields: [
+        {
+          name: 'code',
+          type: 'text',
+          admin: {
+            description: 'Código del cupón aplicado',
+          },
+        },
+        {
+          name: 'discountType',
+          type: 'select',
+          options: [
+            { label: 'Porcentaje', value: 'percentage' },
+            { label: 'Monto fijo', value: 'fixed' },
+            { label: 'Envío gratis', value: 'free_shipping' },
+          ],
+        },
+        {
+          name: 'discountValue',
+          type: 'number',
+          min: 0,
+          admin: {
+            description: 'Valor del descuento aplicado',
+          },
+        },
+        {
+          name: 'discountAmount',
+          type: 'number',
+          min: 0,
+          admin: {
+            description: 'Monto total descontado',
+            readOnly: true,
+          },
+        },
+      ],
+    },
+    {
       name: 'shipping',
       type: 'number',
       required: true,
@@ -293,10 +332,31 @@ export const Orders: CollectionConfig = {
             item.total = item.quantity * item.price
             return sum + item.total
           }, 0)
-          
-          data.total = data.subtotal + (data.shipping || 0) + (data.tax || 0)
+
+          // Calculate coupon discount
+          let discountAmount = 0
+          if (data.coupon?.code && data.coupon?.discountType) {
+            if (data.coupon.discountType === 'percentage') {
+              discountAmount = Math.round((data.subtotal * (data.coupon.discountValue || 0)) / 100)
+            } else if (data.coupon.discountType === 'fixed') {
+              discountAmount = data.coupon.discountValue || 0
+            } else if (data.coupon.discountType === 'free_shipping') {
+              // Free shipping is handled in shipping calculation
+              discountAmount = 0
+            }
+            data.coupon.discountAmount = discountAmount
+          }
+
+          // Apply free shipping if coupon applies
+          let shippingCost = data.shipping || 0
+          if (data.coupon?.discountType === 'free_shipping') {
+            shippingCost = 0
+            data.shipping = 0
+          }
+
+          data.total = data.subtotal - discountAmount + shippingCost + (data.tax || 0)
         }
-        
+
         return data
       },
     ],

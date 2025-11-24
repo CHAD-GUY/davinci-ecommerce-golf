@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react'
-import type { Cart, CartItem, CartContextType } from '@/types/cart'
+import type { Cart, CartItem, CartContextType, Coupon } from '@/types/cart'
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
@@ -9,6 +9,8 @@ type CartAction =
   | { type: 'ADD_ITEM'; payload: Omit<CartItem, 'quantity'> & { quantity?: number } }
   | { type: 'REMOVE_ITEM'; payload: string }
   | { type: 'UPDATE_QUANTITY'; payload: { id: string; quantity: number } }
+  | { type: 'APPLY_COUPON'; payload: Coupon }
+  | { type: 'REMOVE_COUPON' }
   | { type: 'CLEAR_CART' }
   | { type: 'LOAD_CART'; payload: Cart }
   | { type: 'SET_LOADING'; payload: boolean }
@@ -73,12 +75,25 @@ const cartReducer = (state: Cart & { isLoading: boolean }, action: CartAction): 
       }
     }
 
+    case 'APPLY_COUPON': {
+      return {
+        ...state,
+        coupon: action.payload,
+      }
+    }
+
+    case 'REMOVE_COUPON': {
+      const { coupon, ...restState } = state
+      return restState as Cart & { isLoading: boolean }
+    }
+
     case 'CLEAR_CART':
       return {
         ...state,
         items: [],
         itemCount: 0,
         total: 0,
+        coupon: undefined,
       }
 
     case 'LOAD_CART':
@@ -153,6 +168,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'UPDATE_QUANTITY', payload: { id: itemId, quantity } })
   }
 
+  const applyCoupon = (coupon: Coupon) => {
+    dispatch({ type: 'APPLY_COUPON', payload: coupon })
+  }
+
+  const removeCoupon = () => {
+    dispatch({ type: 'REMOVE_COUPON' })
+  }
+
   const clearCart = () => {
     dispatch({ type: 'CLEAR_CART' })
   }
@@ -162,10 +185,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       items: state.items,
       total: state.total,
       itemCount: state.itemCount,
+      coupon: state.coupon,
     },
+    itemCount: state.itemCount,
     addItem,
     removeItem,
     updateQuantity,
+    applyCoupon,
+    removeCoupon,
     clearCart,
     isLoading: state.isLoading,
   }
