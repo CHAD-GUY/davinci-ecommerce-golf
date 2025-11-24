@@ -63,18 +63,21 @@ export function Header({ logo, siteName }: HeaderProps) {
                 {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-              <nav className="flex flex-col gap-4 mt-8">
+            <SheetContent
+              side="right"
+              className="w-full px-4 flex flex-col items-center justify-center"
+            >
+              <nav className="flex flex-col gap-16">
                 <Link
                   href="/products"
-                  className="text-lg font-medium hover:underline underline-offset-4"
+                  className="text-3xl font-medium uppercase hover:underline underline-offset-4"
                   onClick={() => setIsOpen(false)}
                 >
                   Products
                 </Link>
                 <Link
                   href="/cart"
-                  className="text-lg font-medium hover:underline underline-offset-4 flex items-center gap-2"
+                  className="text-3xl font-medium uppercase hover:underline underline-offset-4 flex items-center gap-2"
                   onClick={() => setIsOpen(false)}
                 >
                   Cart {itemCount > 0 && `(${itemCount})`}
