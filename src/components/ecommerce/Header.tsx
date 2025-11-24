@@ -70,14 +70,14 @@ export function Header({ logo, siteName }: HeaderProps) {
                   className="text-lg font-medium hover:underline underline-offset-4"
                   onClick={() => setIsOpen(false)}
                 >
-                  Productos
+                  Products
                 </Link>
                 <Link
                   href="/cart"
                   className="text-lg font-medium hover:underline underline-offset-4 flex items-center gap-2"
                   onClick={() => setIsOpen(false)}
                 >
-                  Carrito {itemCount > 0 && `(${itemCount})`}
+                  Cart {itemCount > 0 && `(${itemCount})`}
                 </Link>
               </nav>
             </SheetContent>

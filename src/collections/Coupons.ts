@@ -12,7 +12,7 @@ export const Coupons: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: 'Código del cupón (ej: BIENVENIDO15, ENVIOGRATIS)',
+        description: 'Coupon code (e.g.: WELCOME15, FREESHIPPING)',
       },
     },
     {
@@ -20,7 +20,7 @@ export const Coupons: CollectionConfig = {
       type: 'textarea',
       required: true,
       admin: {
-        description: 'Descripción del cupón para mostrar al usuario',
+        description: 'Coupon description to display to the user',
       },
     },
     {
@@ -29,15 +29,15 @@ export const Coupons: CollectionConfig = {
       required: true,
       options: [
         {
-          label: 'Porcentaje',
+          label: 'Percentage',
           value: 'percentage',
         },
         {
-          label: 'Monto fijo',
+          label: 'Fixed Amount',
           value: 'fixed',
         },
         {
-          label: 'Envío gratis',
+          label: 'Free Shipping',
           value: 'free_shipping',
         },
       ],
@@ -50,7 +50,7 @@ export const Coupons: CollectionConfig = {
       min: 0,
       admin: {
         condition: (data) => data.discountType !== 'free_shipping',
-        description: 'Valor del descuento (porcentaje o monto en pesos)',
+        description: 'Discount value (percentage or amount in pesos)',
       },
     },
     {
@@ -58,7 +58,7 @@ export const Coupons: CollectionConfig = {
       type: 'number',
       min: 0,
       admin: {
-        description: 'Monto mínimo de compra para aplicar el cupón (opcional)',
+        description: 'Minimum purchase amount to apply the coupon (optional)',
       },
     },
     {
@@ -66,7 +66,7 @@ export const Coupons: CollectionConfig = {
       type: 'number',
       min: 0,
       admin: {
-        description: 'Cantidad máxima de usos del cupón (dejar vacío para ilimitado)',
+        description: 'Maximum number of times the coupon can be used (leave empty for unlimited)',
       },
     },
     {
@@ -75,7 +75,7 @@ export const Coupons: CollectionConfig = {
       defaultValue: 0,
       admin: {
         readOnly: true,
-        description: 'Cantidad de veces que se usó el cupón',
+        description: 'Number of times the coupon has been used',
       },
     },
     {
@@ -83,14 +83,14 @@ export const Coupons: CollectionConfig = {
       type: 'date',
       required: true,
       admin: {
-        description: 'Fecha desde la cual el cupón es válido',
+        description: 'Date from which the coupon is valid',
       },
     },
     {
       name: 'validUntil',
       type: 'date',
       admin: {
-        description: 'Fecha hasta la cual el cupón es válido (opcional)',
+        description: 'Date until which the coupon is valid (optional)',
       },
     },
     {
@@ -98,7 +98,7 @@ export const Coupons: CollectionConfig = {
       type: 'checkbox',
       defaultValue: true,
       admin: {
-        description: 'Si el cupón está activo y puede ser usado',
+        description: 'Whether the coupon is active and can be used',
       },
     },
     {
@@ -106,7 +106,7 @@ export const Coupons: CollectionConfig = {
       type: 'checkbox',
       defaultValue: false,
       admin: {
-        description: 'Mostrar este cupón en el sitio público',
+        description: 'Display this coupon on the public site',
       },
     },
   ],

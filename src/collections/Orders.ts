@@ -182,16 +182,16 @@ export const Orders: CollectionConfig = {
           name: 'code',
           type: 'text',
           admin: {
-            description: 'Código del cupón aplicado',
+            description: 'Applied coupon code',
           },
         },
         {
           name: 'discountType',
           type: 'select',
           options: [
-            { label: 'Porcentaje', value: 'percentage' },
-            { label: 'Monto fijo', value: 'fixed' },
-            { label: 'Envío gratis', value: 'free_shipping' },
+            { label: 'Percentage', value: 'percentage' },
+            { label: 'Fixed Amount', value: 'fixed' },
+            { label: 'Free Shipping', value: 'free_shipping' },
           ],
         },
         {
@@ -199,7 +199,7 @@ export const Orders: CollectionConfig = {
           type: 'number',
           min: 0,
           admin: {
-            description: 'Valor del descuento aplicado',
+            description: 'Applied discount value',
           },
         },
         {
@@ -207,7 +207,7 @@ export const Orders: CollectionConfig = {
           type: 'number',
           min: 0,
           admin: {
-            description: 'Monto total descontado',
+            description: 'Total discounted amount',
             readOnly: true,
           },
         },
@@ -325,7 +325,7 @@ export const Orders: CollectionConfig = {
         if (!data.orderNumber) {
           data.orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}`
         }
-        
+
         // Calculate totals
         if (data.items) {
           data.subtotal = data.items.reduce((sum: number, item: any) => {

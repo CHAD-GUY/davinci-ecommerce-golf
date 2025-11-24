@@ -117,7 +117,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const handleAddToCart = () => {
     if (product.productType === 'variable') {
       if (!selectedVariant) {
-        toast.error('Por favor selecciona color y talla')
+        toast.error('Please select color and size')
         return
       }
 
@@ -139,7 +139,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
       addItem(cartItem)
       toast.success(
-        `${quantity}x ${product.name} (${selectedVariant.color} - ${selectedVariant.size?.toUpperCase()}) agregado al carrito`,
+        `${quantity}x ${product.name} (${selectedVariant.color} - ${selectedVariant.size?.toUpperCase()}) added to cart`,
       )
     } else {
       const cartItem = {
@@ -152,7 +152,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
       }
 
       addItem(cartItem)
-      toast.success(`${quantity}x ${product.name} agregado al carrito`)
+      toast.success(`${quantity}x ${product.name} added to cart`)
     }
   }
 
@@ -276,7 +276,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
                 {availableSizes && availableSizes.length > 0 && (
                   <div>
                     <label className="text-sm font-medium text-foreground block mb-3">
-                      Talla:{' '}
+                      Size:{' '}
                       <span className="font-normal text-muted-foreground">
                         {selectedSize?.toUpperCase()}
                       </span>
@@ -314,10 +314,10 @@ export function ProductDetail({ product }: ProductDetailProps) {
             {/* Quantity and Stock */}
             <div className="space-y-3 py-2">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-foreground">Cantidad</label>
+                <label className="text-sm font-medium text-foreground">Quantity</label>
                 <span className="text-sm text-muted-foreground">
                   Stock: <span className="font-medium text-foreground">{currentStock}</span>{' '}
-                  {currentStock === 1 ? 'unidad' : 'unidades'}
+                  {currentStock === 1 ? 'unit' : 'units'}
                 </span>
               </div>
 
@@ -356,8 +356,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
               >
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 {isOutOfStock
-                  ? 'Sin Stock'
-                  : `Agregar - ${formatPrice((selectedVariant?.price || product.price) * quantity)}`}
+                  ? 'Out of Stock'
+                  : `Add to Cart - ${formatPrice((selectedVariant?.price || product.price) * quantity)}`}
               </Button>
             </div>
 
@@ -368,8 +368,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
                   <Truck className="w-5 h-5 text-foreground" />
                 </div>
                 <div className="text-sm">
-                  <div className="font-medium text-foreground">Envío Gratis</div>
-                  <div className="text-muted-foreground">Desde $50,000</div>
+                  <div className="font-medium text-foreground">Free Shipping</div>
+                  <div className="text-muted-foreground">Over $50,000</div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -377,8 +377,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
                   <Shield className="w-5 h-5 text-foreground" />
                 </div>
                 <div className="text-sm">
-                  <div className="font-medium text-foreground">Compra Segura</div>
-                  <div className="text-muted-foreground">Pagos protegidos</div>
+                  <div className="font-medium text-foreground">Secure Purchase</div>
+                  <div className="text-muted-foreground">Protected payments</div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -386,8 +386,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
                   <RefreshCw className="w-5 h-5 text-foreground" />
                 </div>
                 <div className="text-sm">
-                  <div className="font-medium text-foreground">Devoluciones</div>
-                  <div className="text-muted-foreground">30 días</div>
+                  <div className="font-medium text-foreground">Returns</div>
+                  <div className="text-muted-foreground">30 days</div>
                 </div>
               </div>
             </div>
@@ -397,10 +397,10 @@ export function ProductDetail({ product }: ProductDetailProps) {
         {/* Product Description */}
         <div className="mt-16 mb-8">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-foreground">Descripción</h2>
+            <h2 className="text-2xl font-bold text-foreground">Description</h2>
           </div>
 
-          <Card className="p-6 border">
+          <Card className="p-6 border bg-transparent">
             <div
               className="prose prose-sm max-w-none text-muted-foreground"
               dangerouslySetInnerHTML={{ __html: product.description }}
@@ -408,7 +408,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
             {product.tags && product.tags.length > 0 && (
               <div className="mt-6 pt-6 border-t">
-                <h4 className="font-medium text-foreground mb-3">Etiquetas:</h4>
+                <h4 className="font-medium text-foreground mb-3">Tags:</h4>
                 <div className="flex flex-wrap gap-2">
                   {product.tags.map((tag) => (
                     <Badge key={tag} variant="outline" className="text-xs">

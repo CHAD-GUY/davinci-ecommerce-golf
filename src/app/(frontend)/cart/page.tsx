@@ -42,7 +42,7 @@ export default function CartPage() {
 
   const handleApplyCoupon = async () => {
     if (!couponCode.trim()) {
-      toast.error('Por favor ingresa un código de cupón')
+      toast.error('Please enter a coupon code')
       return
     }
 
@@ -63,20 +63,20 @@ export default function CartPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        toast.error(data.error || 'Cupón inválido')
+        toast.error(data.error || 'Invalid coupon')
         return
       }
 
       if (data.valid && data.coupon) {
         applyCoupon(data.coupon)
-        toast.success('¡Cupón aplicado correctamente!')
+        toast.success('Coupon applied successfully!')
         setCouponCode('')
       } else {
-        toast.error('Cupón inválido')
+        toast.error('Invalid coupon')
       }
     } catch (error) {
       console.error('Error applying coupon:', error)
-      toast.error('Error al aplicar el cupón')
+      toast.error('Error applying coupon')
     } finally {
       setIsApplyingCoupon(false)
     }
@@ -84,7 +84,7 @@ export default function CartPage() {
 
   const handleRemoveCoupon = () => {
     removeCoupon()
-    toast.success('Cupón removido')
+    toast.success('Coupon removed')
   }
 
   if (cart.items.length === 0) {
@@ -92,14 +92,14 @@ export default function CartPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-6" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Tu carrito está vacío</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Your cart is empty</h1>
           <p className="text-gray-600 mb-8">
-            Parece que aún no has agregado productos a tu carrito
+            Looks like you haven't added any products to your cart yet
           </p>
           <Button asChild size="lg">
             <Link href="/products">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Continuar Comprando
+              Continue Shopping
             </Link>
           </Button>
         </div>
@@ -117,11 +117,11 @@ export default function CartPage() {
             className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Continuar Comprando
+            Continue Shopping
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">Carrito de Compras</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
           <p className="text-gray-600">
-            {cart.itemCount} {cart.itemCount === 1 ? 'producto' : 'productos'} en tu carrito
+            {cart.itemCount} {cart.itemCount === 1 ? 'product' : 'products'} in your cart
           </p>
         </div>
 
@@ -156,7 +156,7 @@ export default function CartPage() {
                               )}
                               {item.variant.size && (
                                 <Badge variant="outline" className="text-xs">
-                                  Talla: {item.variant.size.toUpperCase()}
+                                  Size: {item.variant.size.toUpperCase()}
                                 </Badge>
                               )}
                             </div>
@@ -223,12 +223,12 @@ export default function CartPage() {
           <div className="lg:col-span-4">
             <Card className="sticky top-8">
               <CardHeader>
-                <CardTitle>Resumen del Pedido</CardTitle>
+                <CardTitle>Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Subtotal */}
                 <div className="flex justify-between text-sm">
-                  <span>Subtotal ({cart.itemCount} productos)</span>
+                  <span>Subtotal ({cart.itemCount} products)</span>
                   <span>{formatPrice(cart.total)}</span>
                 </div>
 
@@ -239,7 +239,7 @@ export default function CartPage() {
                       <div className="flex items-center gap-2">
                         <Tag className="w-4 h-4 text-green-600" />
                         <span className="text-sm font-medium text-green-800">
-                          Cupón: {cart.coupon.code}
+                          Coupon: {cart.coupon.code}
                         </span>
                       </div>
                       <Button
@@ -253,25 +253,25 @@ export default function CartPage() {
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-green-700">
-                        Descuento
+                        Discount
                         {cart.coupon.discountType === 'percentage' &&
                           ` (${cart.coupon.discountValue}%)`}
-                        {cart.coupon.discountType === 'free_shipping' && ' (Envío gratis)'}
+                        {cart.coupon.discountType === 'free_shipping' && ' (Free shipping)'}
                       </span>
                       <span className="font-medium text-green-800">
                         {cart.coupon.discountType !== 'free_shipping'
                           ? `-${formatPrice(discountAmount)}`
-                          : 'Aplicado'}
+                          : 'Applied'}
                       </span>
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">¿Tenés un cupón?</label>
+                    <label className="text-sm font-medium">Do you have a coupon?</label>
                     <div className="flex gap-2">
                       <Input
                         type="text"
-                        placeholder="Código de cupón"
+                        placeholder="Coupon code"
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                         onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
@@ -282,7 +282,7 @@ export default function CartPage() {
                         disabled={isApplyingCoupon || !couponCode.trim()}
                         variant="outline"
                       >
-                        {isApplyingCoupon ? 'Aplicando...' : 'Aplicar'}
+                        {isApplyingCoupon ? 'Applying...' : 'Apply'}
                       </Button>
                     </div>
                   </div>
@@ -290,23 +290,23 @@ export default function CartPage() {
 
                 {/* Shipping */}
                 <div className="flex justify-between text-sm">
-                  <span>Envío</span>
+                  <span>Shipping</span>
                   <div className="text-right">
                     {isFreeShipping ? (
                       <div>
                         <Badge variant="secondary" className="text-xs mb-1">
-                          ¡Gratis!
+                          Free!
                         </Badge>
                         <div className="text-xs text-gray-500">
                           {cart.coupon?.discountType === 'free_shipping'
-                            ? 'Por cupón'
-                            : 'Por compra superior a $50,000'}
+                            ? 'By coupon'
+                            : 'For purchases over $50,000'}
                         </div>
                       </div>
                     ) : (
                       <div>
                         <span>{formatPrice(shippingCost)}</span>
-                        <div className="text-xs text-gray-500">Envío gratis desde $50,000</div>
+                        <div className="text-xs text-gray-500">Free shipping over $50,000</div>
                       </div>
                     )}
                   </div>
@@ -314,7 +314,7 @@ export default function CartPage() {
 
                 {/* Tax */}
                 <div className="flex justify-between text-sm">
-                  <span>IVA (21%)</span>
+                  <span>VAT (21%)</span>
                   <span>{formatPrice(tax)}</span>
                 </div>
 
@@ -330,7 +330,7 @@ export default function CartPage() {
                 {cart.total < 50000 && !cart.coupon && (
                   <div className="bg-blue-50 p-3 rounded-lg">
                     <div className="text-sm text-blue-800 mb-2">
-                      Agrega {formatPrice(50000 - cart.total)} más para obtener envío gratis
+                      Add {formatPrice(50000 - cart.total)} more to get free shipping
                     </div>
                     <div className="w-full bg-blue-200 rounded-full h-2">
                       <div
@@ -343,17 +343,17 @@ export default function CartPage() {
 
                 {/* Checkout Button */}
                 <Button asChild className="w-full" size="lg">
-                  <Link href="/checkout">Proceder al Checkout</Link>
+                  <Link href="/checkout">Proceed to Checkout</Link>
                 </Button>
 
                 {/* Continue Shopping */}
                 <Button variant="outline" className="w-full" asChild>
-                  <Link href="/products">Continuar Comprando</Link>
+                  <Link href="/products">Continue Shopping</Link>
                 </Button>
 
                 {/* Security Badge */}
                 <div className="text-center pt-4">
-                  <div className="text-xs text-gray-500">🔒 Compra 100% segura</div>
+                  <div className="text-xs text-gray-500">🔒 100% secure purchase</div>
                 </div>
               </CardContent>
             </Card>

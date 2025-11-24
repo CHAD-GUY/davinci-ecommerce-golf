@@ -32,7 +32,7 @@ export function CartDrawer({ children }: CartDrawerProps) {
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <ShoppingCart className="w-5 h-5" />
-            Carrito de Compras
+            Shopping Cart
             {cart.itemCount > 0 && (
               <Badge variant="secondary">{cart.itemCount}</Badge>
             )}
@@ -44,14 +44,14 @@ export function CartDrawer({ children }: CartDrawerProps) {
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <ShoppingCart className="w-16 h-16 text-gray-300 mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Tu carrito está vacío
+                Your cart is empty
               </h3>
               <p className="text-gray-500 mb-6">
-                Agrega algunos productos para comenzar
+                Add some products to get started
               </p>
               <Button asChild>
                 <Link href="/products">
-                  Explorar Productos
+                  Explore Products
                 </Link>
               </Button>
             </div>
@@ -75,12 +75,12 @@ export function CartDrawer({ children }: CartDrawerProps) {
                       <h4 className="text-sm font-medium text-gray-900 truncate">
                         {item.name}
                       </h4>
-                      
+
                       {item.variant && (
                         <p className="text-xs text-gray-500 mt-1">
                           {item.variant.color && `Color: ${item.variant.color}`}
                           {item.variant.color && item.variant.size && ' • '}
-                          {item.variant.size && `Talla: ${item.variant.size.toUpperCase()}`}
+                          {item.variant.size && `Size: ${item.variant.size.toUpperCase()}`}
                         </p>
                       )}
 
@@ -137,18 +137,18 @@ export function CartDrawer({ children }: CartDrawerProps) {
                 <div className="space-y-2">
                   <Button className="w-full" size="lg" asChild>
                     <Link href="/checkout">
-                      Finalizar Compra
+                      Checkout
                     </Link>
                   </Button>
                   <Button variant="outline" className="w-full" asChild>
                     <Link href="/cart">
-                      Ver Carrito Completo
+                      View Full Cart
                     </Link>
                   </Button>
                 </div>
 
                 <p className="text-xs text-gray-500 text-center">
-                  Envío gratis en compras superiores a $50,000
+                  Free shipping on orders over $50,000
                 </p>
               </div>
             </>

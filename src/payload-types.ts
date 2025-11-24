@@ -309,16 +309,16 @@ export interface Order {
   subtotal: number;
   coupon?: {
     /**
-     * Código del cupón aplicado
+     * Applied coupon code
      */
     code?: string | null;
     discountType?: ('percentage' | 'fixed' | 'free_shipping') | null;
     /**
-     * Valor del descuento aplicado
+     * Applied discount value
      */
     discountValue?: number | null;
     /**
-     * Monto total descontado
+     * Total discounted amount
      */
     discountAmount?: number | null;
   };
@@ -342,44 +342,44 @@ export interface Order {
 export interface Coupon {
   id: number;
   /**
-   * Código del cupón (ej: BIENVENIDO15, ENVIOGRATIS)
+   * Coupon code (e.g.: WELCOME15, FREESHIPPING)
    */
   code: string;
   /**
-   * Descripción del cupón para mostrar al usuario
+   * Coupon description to display to the user
    */
   description: string;
   discountType: 'percentage' | 'fixed' | 'free_shipping';
   /**
-   * Valor del descuento (porcentaje o monto en pesos)
+   * Discount value (percentage or amount in pesos)
    */
   discountValue?: number | null;
   /**
-   * Monto mínimo de compra para aplicar el cupón (opcional)
+   * Minimum purchase amount to apply the coupon (optional)
    */
   minimumPurchase?: number | null;
   /**
-   * Cantidad máxima de usos del cupón (dejar vacío para ilimitado)
+   * Maximum number of times the coupon can be used (leave empty for unlimited)
    */
   usageLimit?: number | null;
   /**
-   * Cantidad de veces que se usó el cupón
+   * Number of times the coupon has been used
    */
   usageCount?: number | null;
   /**
-   * Fecha desde la cual el cupón es válido
+   * Date from which the coupon is valid
    */
   validFrom: string;
   /**
-   * Fecha hasta la cual el cupón es válido (opcional)
+   * Date until which the coupon is valid (optional)
    */
   validUntil?: string | null;
   /**
-   * Si el cupón está activo y puede ser usado
+   * Whether the coupon is active and can be used
    */
   active?: boolean | null;
   /**
-   * Mostrar este cupón en el sitio público
+   * Display this coupon on the public site
    */
   showOnSite?: boolean | null;
   updatedAt: string;
@@ -705,79 +705,79 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SiteSetting {
   id: number;
   /**
-   * Nombre del sitio web
+   * Website name
    */
   siteName: string;
   /**
-   * Descripción general del sitio
+   * General site description
    */
   siteDescription: string;
   /**
-   * URL completa del sitio (sin / al final)
+   * Full site URL (without trailing /)
    */
   siteUrl: string;
   /**
-   * Email de contacto principal
+   * Main contact email
    */
   contactEmail?: string | null;
   /**
-   * Teléfono de contacto
+   * Contact phone
    */
   contactPhone?: string | null;
   /**
-   * Logo principal del sitio (recomendado: PNG con fondo transparente)
+   * Main site logo (recommended: PNG with transparent background)
    */
   logo: number | Media;
   /**
-   * Logo para modo oscuro (opcional)
+   * Logo for dark mode (optional)
    */
   logoDark?: (number | null) | Media;
   /**
-   * Favicon del sitio (recomendado: ICO, PNG o SVG, 32x32px o mayor)
+   * Site favicon (recommended: ICO, PNG or SVG, 32x32px or larger)
    */
   favicon: number | Media;
   /**
-   * Icono para dispositivos Apple (recomendado: PNG 180x180px)
+   * Icon for Apple devices (recommended: PNG 180x180px)
    */
   appleTouchIcon?: (number | null) | Media;
   /**
-   * Título SEO por defecto (si está vacío, usa siteName)
+   * Default SEO title (if empty, uses siteName)
    */
   metaTitle?: string | null;
   /**
-   * Descripción SEO por defecto (máx. 160 caracteres)
+   * Default SEO description (max. 160 characters)
    */
   metaDescription?: string | null;
   /**
-   * Palabras clave separadas por comas
+   * Keywords separated by commas
    */
   metaKeywords?: string | null;
   /**
-   * Autor del sitio
+   * Site author
    */
   metaAuthor?: string | null;
   /**
-   * Título para redes sociales (si está vacío, usa metaTitle o siteName)
+   * Title for social media (if empty, uses metaTitle or siteName)
    */
   ogTitle?: string | null;
   /**
-   * Descripción para redes sociales
+   * Description for social media
    */
   ogDescription?: string | null;
   /**
-   * Imagen para compartir en redes sociales (recomendado: 1200x630px)
+   * Image for sharing on social media (recommended: 1200x630px)
    */
   ogImage?: (number | null) | Media;
   /**
-   * Tipo de contenido Open Graph
+   * Open Graph content type
    */
   ogType?: ('website' | 'article' | 'product') | null;
   /**
-   * Tipo de tarjeta de Twitter/X
+   * Twitter/X card type
    */
   twitterCard?: ('summary' | 'summary_large_image' | 'app' | 'player') | null;
   /**
-   * Usuario de Twitter/X (ej: @davincistore)
+   * Twitter/X username (e.g.: @davincistore)
    */
   twitterHandle?: string | null;
   /**
@@ -793,25 +793,25 @@ export interface SiteSetting {
    */
   facebookPixelId?: string | null;
   /**
-   * Código de verificación de Google Search Console
+   * Google Search Console verification code
    */
   googleSiteVerification?: string | null;
   /**
-   * Nombre de la organización para Schema.org
+   * Organization name for Schema.org
    */
   organizationName?: string | null;
   /**
-   * Logo de la organización (se usará para JSON-LD)
+   * Organization logo (will be used for JSON-LD)
    */
   organizationLogo?: (number | null) | Media;
   /**
-   * Perfiles de redes sociales para Schema.org
+   * Social media profiles for Schema.org
    */
   socialProfiles?:
     | {
         platform: 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'youtube' | 'tiktok';
         /**
-         * URL completa del perfil
+         * Full profile URL
          */
         url: string;
         id?: string | null;
@@ -830,15 +830,15 @@ export interface Home {
   heroSubtitle?: string | null;
   heroMediaType: 'image' | 'video';
   /**
-   * Imagen de fondo para el hero (recomendado: 1920x1080px)
+   * Background image for hero (recommended: 1920x1080px)
    */
   heroImage?: (number | null) | Media;
   /**
-   * Video de fondo para el hero (formato: MP4, WebM)
+   * Background video for hero (format: MP4, WebM)
    */
   heroVideo?: (number | null) | Media;
   /**
-   * Imagen de respaldo para dispositivos que no soporten video
+   * Fallback image for devices that do not support video
    */
   heroVideoFallback?: (number | null) | Media;
   heroCTA?: {
@@ -850,15 +850,15 @@ export interface Home {
         title: string;
         description?: string | null;
         /**
-         * Video principal (MP4, WebM)
+         * Main video (MP4, WebM)
          */
         video: number | Media;
         /**
-         * Imagen de vista previa del video
+         * Video preview image
          */
         thumbnail?: (number | null) | Media;
         /**
-         * URL de video externo (YouTube, Vimeo) - opcional, si se usa esto se ignora el video subido
+         * External video URL (YouTube, Vimeo) - optional, if used the uploaded video is ignored
          */
         videoUrl?: string | null;
         layout?: ('full' | 'video-left' | 'video-right') | null;
@@ -872,11 +872,11 @@ export interface Home {
   featuredProductsTitle?: string | null;
   featuredProductsSubtitle?: string | null;
   /**
-   * Mostrar sección de productos destacados (se mostrarán automáticamente los productos marcados como destacados)
+   * Show featured products section (products marked as featured will be displayed automatically)
    */
   showFeaturedProducts?: boolean | null;
   /**
-   * Cantidad de productos destacados a mostrar
+   * Number of featured products to display
    */
   featuredProductsLimit?: number | null;
   ctaSections?:
@@ -885,7 +885,7 @@ export interface Home {
         description?: string | null;
         backgroundImage?: (number | null) | Media;
         /**
-         * Color de fondo en formato HEX (ej: #000000) - se usa si no hay imagen
+         * Background color in HEX format (e.g.: #000000) - used if there is no image
          */
         backgroundColor?: string | null;
         textColor?: ('dark' | 'light') | null;

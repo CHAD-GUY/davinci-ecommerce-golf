@@ -16,12 +16,12 @@ export const Home: GlobalConfig = {
               name: 'heroTitle',
               type: 'text',
               required: true,
-              defaultValue: 'Bienvenido a Davinci Store',
+              defaultValue: 'Welcome to Davinci Store',
             },
             {
               name: 'heroSubtitle',
               type: 'textarea',
-              defaultValue: 'Descubre nuestra colección exclusiva',
+              defaultValue: 'Discover our exclusive collection',
             },
             {
               name: 'heroMediaType',
@@ -30,7 +30,7 @@ export const Home: GlobalConfig = {
               defaultValue: 'image',
               options: [
                 {
-                  label: 'Imagen',
+                  label: 'Image',
                   value: 'image',
                 },
                 {
@@ -45,7 +45,7 @@ export const Home: GlobalConfig = {
               relationTo: 'media',
               admin: {
                 condition: (data) => data.heroMediaType === 'image',
-                description: 'Imagen de fondo para el hero (recomendado: 1920x1080px)',
+                description: 'Background image for hero (recommended: 1920x1080px)',
               },
             },
             {
@@ -54,7 +54,7 @@ export const Home: GlobalConfig = {
               relationTo: 'media',
               admin: {
                 condition: (data) => data.heroMediaType === 'video',
-                description: 'Video de fondo para el hero (formato: MP4, WebM)',
+                description: 'Background video for hero (format: MP4, WebM)',
               },
             },
             {
@@ -63,7 +63,7 @@ export const Home: GlobalConfig = {
               relationTo: 'media',
               admin: {
                 condition: (data) => data.heroMediaType === 'video',
-                description: 'Imagen de respaldo para dispositivos que no soporten video',
+                description: 'Fallback image for devices that do not support video',
               },
             },
             {
@@ -73,7 +73,7 @@ export const Home: GlobalConfig = {
                 {
                   name: 'text',
                   type: 'text',
-                  defaultValue: 'Ver Productos',
+                  defaultValue: 'View Products',
                 },
                 {
                   name: 'link',
@@ -106,7 +106,7 @@ export const Home: GlobalConfig = {
                   relationTo: 'media',
                   required: true,
                   admin: {
-                    description: 'Video principal (MP4, WebM)',
+                    description: 'Main video (MP4, WebM)',
                   },
                 },
                 {
@@ -114,14 +114,14 @@ export const Home: GlobalConfig = {
                   type: 'upload',
                   relationTo: 'media',
                   admin: {
-                    description: 'Imagen de vista previa del video',
+                    description: 'Video preview image',
                   },
                 },
                 {
                   name: 'videoUrl',
                   type: 'text',
                   admin: {
-                    description: 'URL de video externo (YouTube, Vimeo) - opcional, si se usa esto se ignora el video subido',
+                    description: 'External video URL (YouTube, Vimeo) - optional, if used the uploaded video is ignored',
                   },
                 },
                 {
@@ -130,15 +130,15 @@ export const Home: GlobalConfig = {
                   defaultValue: 'full',
                   options: [
                     {
-                      label: 'Ancho completo',
+                      label: 'Full width',
                       value: 'full',
                     },
                     {
-                      label: 'Video izquierda, texto derecha',
+                      label: 'Video left, text right',
                       value: 'video-left',
                     },
                     {
-                      label: 'Texto izquierda, video derecha',
+                      label: 'Text left, video right',
                       value: 'video-right',
                     },
                   ],
@@ -167,7 +167,7 @@ export const Home: GlobalConfig = {
             {
               name: 'featuredProductsTitle',
               type: 'text',
-              defaultValue: 'Productos Destacados',
+              defaultValue: 'Featured Products',
             },
             {
               name: 'featuredProductsSubtitle',
@@ -178,7 +178,7 @@ export const Home: GlobalConfig = {
               type: 'checkbox',
               defaultValue: true,
               admin: {
-                description: 'Mostrar sección de productos destacados (se mostrarán automáticamente los productos marcados como destacados)',
+                description: 'Show featured products section (products marked as featured will be displayed automatically)',
               },
             },
             {
@@ -188,7 +188,7 @@ export const Home: GlobalConfig = {
               min: 1,
               max: 12,
               admin: {
-                description: 'Cantidad de productos destacados a mostrar',
+                description: 'Number of featured products to display',
               },
             },
           ],
@@ -218,7 +218,7 @@ export const Home: GlobalConfig = {
                   name: 'backgroundColor',
                   type: 'text',
                   admin: {
-                    description: 'Color de fondo en formato HEX (ej: #000000) - se usa si no hay imagen',
+                    description: 'Background color in HEX format (e.g.: #000000) - used if there is no image',
                   },
                 },
                 {
@@ -227,11 +227,11 @@ export const Home: GlobalConfig = {
                   defaultValue: 'dark',
                   options: [
                     {
-                      label: 'Oscuro',
+                      label: 'Dark',
                       value: 'dark',
                     },
                     {
-                      label: 'Claro',
+                      label: 'Light',
                       value: 'light',
                     },
                   ],
@@ -257,11 +257,11 @@ export const Home: GlobalConfig = {
                       defaultValue: 'default',
                       options: [
                         {
-                          label: 'Principal',
+                          label: 'Primary',
                           value: 'default',
                         },
                         {
-                          label: 'Secundario',
+                          label: 'Secondary',
                           value: 'secondary',
                         },
                         {

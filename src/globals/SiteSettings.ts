@@ -18,16 +18,16 @@ export const SiteSettings: GlobalConfig = {
               required: true,
               defaultValue: 'Davinci Store',
               admin: {
-                description: 'Nombre del sitio web',
+                description: 'Website name',
               },
             },
             {
               name: 'siteDescription',
               type: 'textarea',
               required: true,
-              defaultValue: 'Tu tienda online de confianza',
+              defaultValue: 'Your trusted online store',
               admin: {
-                description: 'Descripción general del sitio',
+                description: 'General site description',
               },
             },
             {
@@ -36,21 +36,21 @@ export const SiteSettings: GlobalConfig = {
               required: true,
               defaultValue: 'https://davinci-store.com',
               admin: {
-                description: 'URL completa del sitio (sin / al final)',
+                description: 'Full site URL (without trailing /)',
               },
             },
             {
               name: 'contactEmail',
               type: 'email',
               admin: {
-                description: 'Email de contacto principal',
+                description: 'Main contact email',
               },
             },
             {
               name: 'contactPhone',
               type: 'text',
               admin: {
-                description: 'Teléfono de contacto',
+                description: 'Contact phone',
               },
             },
           ],
@@ -64,7 +64,7 @@ export const SiteSettings: GlobalConfig = {
               relationTo: 'media',
               required: true,
               admin: {
-                description: 'Logo principal del sitio (recomendado: PNG con fondo transparente)',
+                description: 'Main site logo (recommended: PNG with transparent background)',
               },
             },
             {
@@ -72,7 +72,7 @@ export const SiteSettings: GlobalConfig = {
               type: 'upload',
               relationTo: 'media',
               admin: {
-                description: 'Logo para modo oscuro (opcional)',
+                description: 'Logo for dark mode (optional)',
               },
             },
             {
@@ -81,7 +81,7 @@ export const SiteSettings: GlobalConfig = {
               relationTo: 'media',
               required: true,
               admin: {
-                description: 'Favicon del sitio (recomendado: ICO, PNG o SVG, 32x32px o mayor)',
+                description: 'Site favicon (recommended: ICO, PNG or SVG, 32x32px or larger)',
               },
             },
             {
@@ -89,7 +89,7 @@ export const SiteSettings: GlobalConfig = {
               type: 'upload',
               relationTo: 'media',
               admin: {
-                description: 'Icono para dispositivos Apple (recomendado: PNG 180x180px)',
+                description: 'Icon for Apple devices (recommended: PNG 180x180px)',
               },
             },
           ],
@@ -101,7 +101,7 @@ export const SiteSettings: GlobalConfig = {
               name: 'metaTitle',
               type: 'text',
               admin: {
-                description: 'Título SEO por defecto (si está vacío, usa siteName)',
+                description: 'Default SEO title (if empty, uses siteName)',
               },
             },
             {
@@ -109,21 +109,21 @@ export const SiteSettings: GlobalConfig = {
               type: 'textarea',
               maxLength: 160,
               admin: {
-                description: 'Descripción SEO por defecto (máx. 160 caracteres)',
+                description: 'Default SEO description (max. 160 characters)',
               },
             },
             {
               name: 'metaKeywords',
               type: 'text',
               admin: {
-                description: 'Palabras clave separadas por comas',
+                description: 'Keywords separated by commas',
               },
             },
             {
               name: 'metaAuthor',
               type: 'text',
               admin: {
-                description: 'Autor del sitio',
+                description: 'Site author',
               },
             },
           ],
@@ -135,14 +135,14 @@ export const SiteSettings: GlobalConfig = {
               name: 'ogTitle',
               type: 'text',
               admin: {
-                description: 'Título para redes sociales (si está vacío, usa metaTitle o siteName)',
+                description: 'Title for social media (if empty, uses metaTitle or siteName)',
               },
             },
             {
               name: 'ogDescription',
               type: 'textarea',
               admin: {
-                description: 'Descripción para redes sociales',
+                description: 'Description for social media',
               },
             },
             {
@@ -150,7 +150,7 @@ export const SiteSettings: GlobalConfig = {
               type: 'upload',
               relationTo: 'media',
               admin: {
-                description: 'Imagen para compartir en redes sociales (recomendado: 1200x630px)',
+                description: 'Image for sharing on social media (recommended: 1200x630px)',
               },
             },
             {
@@ -163,7 +163,7 @@ export const SiteSettings: GlobalConfig = {
                 { label: 'Product', value: 'product' },
               ],
               admin: {
-                description: 'Tipo de contenido Open Graph',
+                description: 'Open Graph content type',
               },
             },
             {
@@ -177,14 +177,14 @@ export const SiteSettings: GlobalConfig = {
                 { label: 'Player', value: 'player' },
               ],
               admin: {
-                description: 'Tipo de tarjeta de Twitter/X',
+                description: 'Twitter/X card type',
               },
             },
             {
               name: 'twitterHandle',
               type: 'text',
               admin: {
-                description: 'Usuario de Twitter/X (ej: @davincistore)',
+                description: 'Twitter/X username (e.g.: @davincistore)',
               },
             },
           ],
@@ -217,7 +217,7 @@ export const SiteSettings: GlobalConfig = {
               name: 'googleSiteVerification',
               type: 'text',
               admin: {
-                description: 'Código de verificación de Google Search Console',
+                description: 'Google Search Console verification code',
               },
             },
           ],
@@ -229,7 +229,7 @@ export const SiteSettings: GlobalConfig = {
               name: 'organizationName',
               type: 'text',
               admin: {
-                description: 'Nombre de la organización para Schema.org',
+                description: 'Organization name for Schema.org',
               },
             },
             {
@@ -237,7 +237,7 @@ export const SiteSettings: GlobalConfig = {
               type: 'upload',
               relationTo: 'media',
               admin: {
-                description: 'Logo de la organización (se usará para JSON-LD)',
+                description: 'Organization logo (will be used for JSON-LD)',
               },
             },
             {
@@ -262,12 +262,12 @@ export const SiteSettings: GlobalConfig = {
                   type: 'text',
                   required: true,
                   admin: {
-                    description: 'URL completa del perfil',
+                    description: 'Full profile URL',
                   },
                 },
               ],
               admin: {
-                description: 'Perfiles de redes sociales para Schema.org',
+                description: 'Social media profiles for Schema.org',
               },
             },
           ],

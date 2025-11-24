@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayloadClient } from '@/lib/payload'
 
+export const revalidate = 30
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams

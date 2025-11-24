@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getPayloadClient } from '@/lib/payload'
 
+export const revalidate = 30
+
 export async function GET() {
   try {
     const payload = await getPayloadClient()

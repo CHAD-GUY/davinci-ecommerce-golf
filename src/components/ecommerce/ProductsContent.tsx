@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import type { Product } from '@/payload-types'
+import { Loader2 } from 'lucide-react'
 
 interface Category {
   id: string
@@ -28,7 +29,7 @@ interface ProductsContentProps {
 export function ProductsContent({ categories }: ProductsContentProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const categoryFromUrl = searchParams.get('category') || 'all'
+  const categoryFromUrl = searchParams?.get('category') || 'all'
 
   const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl)
   const [sortBy, setSortBy] = useState<string>('name-asc')
@@ -40,6 +41,17 @@ export function ProductsContent({ categories }: ProductsContentProps) {
 
   // Use custom hook to fetch products
   const { products, isLoading } = useProducts(selectedCategory)
+
+  // Debug: log current state
+  console.log('Selected category:', selectedCategory, typeof selectedCategory)
+  console.log(
+    'Categories:',
+    categories.map((c) => ({ id: c.id, name: c.name, idType: typeof c.id })),
+  )
+  console.log(
+    'Match found?',
+    categories.find((c) => String(c.id) === selectedCategory),
+  )
 
   // Sort products client-side
   const sortedProducts = [...products].sort((a, b) => {
@@ -92,24 +104,13 @@ export function ProductsContent({ categories }: ProductsContentProps) {
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
         {/* Filters Bar */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700">
-                {isLoading ? 'Cargando...' : `${transformedProducts.length} productos`}
-              </span>
-              {selectedCategory !== 'all' && (
-                <Badge variant="secondary">
-                  {categories.find((c) => c.id === selectedCategory)?.name || 'Categoría'}
-                </Badge>
-              )}
-            </div>
-
             <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
               {/* Category Filter */}
               <div className="flex items-center gap-2">
                 <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
-                  Categoría:
+                  Category:
                 </label>
                 <Select
                   value={selectedCategory}
@@ -123,13 +124,17 @@ export function ProductsContent({ categories }: ProductsContentProps) {
                     router.push(`/products${params.toString() ? `?${params.toString()}` : ''}`)
                   }}
                 >
-                  <SelectTrigger className="w-[200px]">
-                    <SelectValue placeholder="Todas" />
+                  <SelectTrigger className="w-[200px] border-border">
+                    <SelectValue placeholder="All categories" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todas las categorías</SelectItem>
+                  <SelectContent className="bg-background">
+                    <SelectItem value="all">All categories</SelectItem>
                     {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
+                      <SelectItem
+                        key={category.id}
+                        value={String(category.id)}
+                        className="hover:!bg-black/5"
+                      >
                         {category.name}
                       </SelectItem>
                     ))}
@@ -140,17 +145,25 @@ export function ProductsContent({ categories }: ProductsContentProps) {
               {/* Sort Filter */}
               <div className="flex items-center gap-2">
                 <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
-                  Ordenar:
+                  Sort by:
                 </label>
                 <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-[200px]">
+                  <SelectTrigger className="w-[200px] border-border">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="name-asc">Nombre: A-Z</SelectItem>
-                    <SelectItem value="name-desc">Nombre: Z-A</SelectItem>
-                    <SelectItem value="price-asc">Precio: Menor a Mayor</SelectItem>
-                    <SelectItem value="price-desc">Precio: Mayor a Menor</SelectItem>
+                  <SelectContent className="bg-background">
+                    <SelectItem value="name-asc" className="hover:!bg-black/5">
+                      Name: A-Z
+                    </SelectItem>
+                    <SelectItem value="name-desc" className="hover:!bg-black/5">
+                      Name: Z-A
+                    </SelectItem>
+                    <SelectItem value="price-asc" className="hover:!bg-black/5">
+                      Price: Low to High
+                    </SelectItem>
+                    <SelectItem value="price-desc" className="hover:!bg-black/5">
+                      Price: High to Low
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -162,8 +175,7 @@ export function ProductsContent({ categories }: ProductsContentProps) {
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-              <p className="mt-4 text-gray-600">Cargando productos...</p>
+              <Loader2 className="w-12 h-12 text-gray-600 animate-spin" />
             </div>
           </div>
         ) : transformedProducts.length > 0 ? (
@@ -189,11 +201,11 @@ export function ProductsContent({ categories }: ProductsContentProps) {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No se encontraron productos</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
             <p className="text-gray-500 mb-6">
               {selectedCategory !== 'all'
-                ? 'No hay productos en esta categoría. Intenta con otra categoría.'
-                : 'Pronto agregaremos productos. ¡Vuelve pronto!'}
+                ? 'There are no products in this category. Try another category.'
+                : 'We will add products soon. Come back soon!'}
             </p>
             {selectedCategory !== 'all' && (
               <button
@@ -203,7 +215,7 @@ export function ProductsContent({ categories }: ProductsContentProps) {
                 }}
                 className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
-                Ver todos los productos
+                View all products
               </button>
             )}
           </div>
