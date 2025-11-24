@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
+import type { Product } from '@/payload-types'
 
 interface Category {
   id: string
@@ -175,7 +176,7 @@ export function ProductsContent({ categories }: ProductsContentProps) {
           </div>
         ) : transformedProducts.length > 0 ? (
           <ProductGrid>
-            {transformedProducts.map((product) => (
+            {transformedProducts.map((product: any) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </ProductGrid>

@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
@@ -42,7 +41,6 @@ export default function CheckoutPage() {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
   })
@@ -73,22 +71,53 @@ export default function CheckoutPage() {
 
   const onSubmit = async (data: CheckoutFormData) => {
     setIsProcessing(true)
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Generate mock order number
-      const mockOrderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 5).toUpperCase()}`
-      
+      // Create order via API
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customer: {
+            email: data.email,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phone: data.phone,
+          },
+          shippingAddress: {
+            street: data.street,
+            city: data.city,
+            state: data.state,
+            zipCode: data.zipCode,
+          },
+          items: cart.items,
+          subtotal: cart.total,
+          coupon: cart.coupon,
+          shipping: shippingCost,
+          tax,
+          total: finalTotal,
+          paymentMethod: data.paymentMethod,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error al crear el pedido')
+      }
+
+      const result = await response.json()
+
       // Clear cart and show success
       clearCart()
-      setOrderNumber(mockOrderNumber)
+      setOrderNumber(result.order.orderNumber)
       setOrderCompleted(true)
-      
+
       toast.success('¡Pedido realizado con éxito!')
     } catch (error) {
-      toast.error('Error al procesar el pedido. Inténtalo nuevamente.')
+      console.error('Error creating order:', error)
+      toast.error(error instanceof Error ? error.message : 'Error al procesar el pedido. Inténtalo nuevamente.')
     } finally {
       setIsProcessing(false)
     }
