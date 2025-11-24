@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { getCategories, getCoupons } from '@/lib/payload'
-import type { Media } from '@/payload-types'
+import type { Category, Media } from '@/payload-types'
 
 export default async function Home() {
   const categoriesResult = await getCategories({ limit: 6 })
@@ -57,12 +57,10 @@ export default async function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Explorá por categoría</h2>
-            <p className="text-muted-foreground">
-              Encontrá lo que buscás en nuestras colecciones
-            </p>
+            <p className="text-muted-foreground">Encontrá lo que buscás en nuestras colecciones</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categoriesResult.docs.map((category) => {
+            {categoriesResult.docs.map((category: Category) => {
               const media = category.image as Media | null
               return (
                 <Link
@@ -93,9 +91,7 @@ export default async function Home() {
       {/* Call to action */}
       <section className="py-16 md:py-24 bg-foreground text-background">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Descubre nuestra colección
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Descubre nuestra colección</h2>
           <p className="text-background/80 mb-8 max-w-2xl mx-auto">
             Encuentra los productos perfectos para tu estilo
           </p>

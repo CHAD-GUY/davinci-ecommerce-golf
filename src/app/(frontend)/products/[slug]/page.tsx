@@ -26,7 +26,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     price: product.price,
     compareAtPrice: product.compareAtPrice || undefined,
     description: serialize(product.description), // Convert rich text to HTML
-    images: product.images.map((img) => {
+    images: product.images.map((img: any) => {
       const media = img.image as Media
       return {
         url: media.url || '/placeholder-product.jpg',
@@ -38,7 +38,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       slug: category.slug,
     },
     productType: product.productType,
-    variants: product.variants?.map((v) => ({
+    variants: product.variants?.map((v: any) => ({
       id: v.id || '',
       name: v.name,
       color: v.color || undefined,
@@ -50,7 +50,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     simpleStock: product.simpleStock || 0,
     featured: product.featured || false,
     status: product.status,
-    tags: product.tags?.map((t) => t.tag) || [],
+    tags: product.tags?.map((t: any) => t.tag) || [],
     sku: product.sku,
   }
 
