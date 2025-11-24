@@ -112,6 +112,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
         name: product.name,
         price: selectedVariant.price,
         image: product.images[0]?.url || '',
+        quantity,
         variant: {
           id: selectedVariant.id,
           name: selectedVariant.name,
@@ -121,7 +122,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
         }
       }
 
-      addItem(cartItem, quantity)
+      addItem(cartItem)
       toast.success(`${quantity}x ${product.name} (${selectedVariant.color} - ${selectedVariant.size?.toUpperCase()}) agregado al carrito`)
     } else {
       const cartItem = {
@@ -130,9 +131,10 @@ export function ProductDetail({ product }: ProductDetailProps) {
         name: product.name,
         price: product.price,
         image: product.images[0]?.url || '',
+        quantity,
       }
 
-      addItem(cartItem, quantity)
+      addItem(cartItem)
       toast.success(`${quantity}x ${product.name} agregado al carrito`)
     }
   }
