@@ -89,15 +89,7 @@ export function ProductsContent({ categories }: ProductsContentProps) {
   }))
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Page Header */}
-      <div className="bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Todos los Productos</h1>
-          <p className="text-gray-600">Descubre nuestra completa colección de productos</p>
-        </div>
-      </div>
-
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
         {/* Filters Bar */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">

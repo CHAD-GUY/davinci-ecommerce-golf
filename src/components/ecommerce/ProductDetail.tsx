@@ -4,9 +4,8 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useCart } from '@/contexts/CartContext'
-import { Heart, Share2, ShoppingCart, Star, Truck, Shield, RefreshCw, Plus, Minus } from 'lucide-react'
+import { ShoppingCart, Truck, Shield, RefreshCw, Plus, Minus } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 
@@ -29,6 +28,7 @@ interface ProductDetailProps {
       price: number
       stock: number
       sku: string
+      image?: { url: string; alt?: string }
     }>
     simpleStock?: number
     featured: boolean
@@ -49,15 +49,15 @@ export function ProductDetail({ product }: ProductDetailProps) {
   useEffect(() => {
     if (product.productType === 'variable' && product.variants) {
       // Set default selections
-      const colors = [...new Set(product.variants.map(v => v.color).filter(Boolean))]
+      const colors = [...new Set(product.variants.map((v) => v.color).filter(Boolean))]
       const firstColor = colors[0]
       if (firstColor) {
         setSelectedColor(firstColor)
 
         // Find first available size for this color
         const sizesForColor = product.variants
-          .filter(v => v.color === firstColor)
-          .map(v => v.size)
+          .filter((v) => v.color === firstColor)
+          .map((v) => v.size)
           .filter(Boolean)
 
         if (sizesForColor.length > 0) {
@@ -69,8 +69,14 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
   useEffect(() => {
     if (product.productType === 'variable' && selectedColor && selectedSize) {
-      const variant = product.variants?.find(v => v.color === selectedColor && v.size === selectedSize)
+      const variant = product.variants?.find(
+        (v) => v.color === selectedColor && v.size === selectedSize,
+      )
       setSelectedVariant(variant || null)
+      // Reset image index when variant changes
+      if (variant) {
+        setSelectedImageIndex(0)
+      }
     }
   }, [selectedColor, selectedSize, product])
 
@@ -85,19 +91,28 @@ export function ProductDetail({ product }: ProductDetailProps) {
     ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
     : 0
 
-  const availableColors = product.productType === 'variable'
-    ? [...new Set(product.variants?.map(v => v.color).filter(Boolean))]
-    : []
+  const availableColors =
+    product.productType === 'variable'
+      ? [...new Set(product.variants?.map((v) => v.color).filter(Boolean))]
+      : []
 
-  const availableSizes = product.productType === 'variable' && selectedColor
-    ? product.variants?.filter(v => v.color === selectedColor).map(v => v.size).filter(Boolean)
-    : []
+  console.log(availableColors)
 
-  const currentStock = product.productType === 'simple'
-    ? product.simpleStock || 0
-    : selectedVariant?.stock || 0
+  const availableSizes =
+    product.productType === 'variable' && selectedColor
+      ? product.variants
+          ?.filter((v) => v.color === selectedColor)
+          .map((v) => v.size)
+          .filter(Boolean)
+      : []
+
+  const currentStock =
+    product.productType === 'simple' ? product.simpleStock || 0 : selectedVariant?.stock || 0
 
   const isOutOfStock = currentStock === 0
+
+  // Determine which images to show: variant image or product images
+  const displayImages = selectedVariant?.image ? [selectedVariant.image] : product.images
 
   const handleAddToCart = () => {
     if (product.productType === 'variable') {
@@ -119,11 +134,13 @@ export function ProductDetail({ product }: ProductDetailProps) {
           color: selectedVariant.color,
           size: selectedVariant.size,
           price: selectedVariant.price,
-        }
+        },
       }
 
       addItem(cartItem)
-      toast.success(`${quantity}x ${product.name} (${selectedVariant.color} - ${selectedVariant.size?.toUpperCase()}) agregado al carrito`)
+      toast.success(
+        `${quantity}x ${product.name} (${selectedVariant.color} - ${selectedVariant.size?.toUpperCase()}) agregado al carrito`,
+      )
     } else {
       const cartItem = {
         id: `${product.id}-simple`,
@@ -142,38 +159,29 @@ export function ProductDetail({ product }: ProductDetailProps) {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Breadcrumb */}
-        <nav className="mb-8">
-          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-            <Link href="/" className="hover:text-foreground transition-colors">Inicio</Link>
-            <span>/</span>
-            <Link href="/products" className="hover:text-foreground transition-colors">Productos</Link>
-            <span>/</span>
-            <span className="text-foreground font-medium">{product.name}</span>
-          </div>
-        </nav>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
           <div className="space-y-4">
             {/* Main Image */}
             <div className="aspect-square bg-muted rounded-lg overflow-hidden border">
               <img
-                src={product.images[selectedImageIndex]?.url || '/placeholder-product.jpg'}
-                alt={product.images[selectedImageIndex]?.alt || product.name}
+                src={displayImages[selectedImageIndex]?.url || '/placeholder-product.jpg'}
+                alt={displayImages[selectedImageIndex]?.alt || product.name}
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
               />
             </div>
 
             {/* Thumbnail Images */}
-            {product.images.length > 1 && (
+            {displayImages.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
-                {product.images.map((img, index) => (
+                {displayImages.map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
                     className={`aspect-square bg-muted rounded-lg overflow-hidden border-2 transition-all ${
-                      index === selectedImageIndex ? 'border-foreground' : 'border-border hover:border-muted-foreground'
+                      index === selectedImageIndex
+                        ? 'border-foreground'
+                        : 'border-border hover:border-muted-foreground'
                     }`}
                   >
                     <img
@@ -197,7 +205,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
               >
                 {product.category.name}
               </Link>
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground mt-2 tracking-tight">{product.name}</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground mt-2 tracking-tight">
+                {product.name}
+              </h1>
             </div>
 
             {/* Price */}
@@ -223,10 +233,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
                 {/* Color Selection */}
                 {availableColors.length > 0 && (
                   <div>
-                    <label className="text-sm font-medium text-foreground block mb-3">
-                      Color: <span className="font-normal text-muted-foreground">{selectedColor}</span>
-                    </label>
-                    <div className="flex flex-wrap gap-2">
+                    <label className="text-sm font-medium text-foreground block mb-3">Color</label>
+                    <div className="flex flex-wrap gap-3">
                       {availableColors.map((color) => (
                         <button
                           key={color}
@@ -234,20 +242,30 @@ export function ProductDetail({ product }: ProductDetailProps) {
                             setSelectedColor(color!)
                             // Reset size selection when color changes
                             const sizesForColor = product.variants
-                              ?.filter(v => v.color === color)
-                              .map(v => v.size)
+                              ?.filter((v) => v.color === color)
+                              .map((v) => v.size)
                               .filter(Boolean)
                             if (sizesForColor && sizesForColor.length > 0) {
                               setSelectedSize(sizesForColor[0]!)
                             }
                           }}
-                          className={`px-5 py-2.5 rounded-md border-2 text-sm font-medium transition-all ${
-                            selectedColor === color
-                              ? 'border-foreground bg-foreground text-background'
-                              : 'border-border bg-background text-foreground hover:border-muted-foreground'
-                          }`}
+                          className="relative group"
+                          title={color}
                         >
-                          {color}
+                          <div
+                            className={`w-10 h-10 rounded-full border-2 transition-all ${
+                              selectedColor === color
+                                ? 'border-foreground scale-110 shadow-lg'
+                                : 'border-border hover:border-muted-foreground hover:scale-105'
+                            }`}
+                            style={{ backgroundColor: color }}
+                          >
+                            {selectedColor === color && (
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-2 h-2 bg-white rounded-full shadow-md" />
+                              </div>
+                            )}
+                          </div>
                         </button>
                       ))}
                     </div>
@@ -258,11 +276,16 @@ export function ProductDetail({ product }: ProductDetailProps) {
                 {availableSizes && availableSizes.length > 0 && (
                   <div>
                     <label className="text-sm font-medium text-foreground block mb-3">
-                      Talla: <span className="font-normal text-muted-foreground">{selectedSize?.toUpperCase()}</span>
+                      Talla:{' '}
+                      <span className="font-normal text-muted-foreground">
+                        {selectedSize?.toUpperCase()}
+                      </span>
                     </label>
                     <div className="flex flex-wrap gap-2">
                       {availableSizes.map((size) => {
-                        const variant = product.variants?.find(v => v.color === selectedColor && v.size === size)
+                        const variant = product.variants?.find(
+                          (v) => v.color === selectedColor && v.size === size,
+                        )
                         const sizeOutOfStock = !variant || variant.stock === 0
 
                         return (
@@ -274,8 +297,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
                               selectedSize === size
                                 ? 'border-foreground bg-foreground text-background'
                                 : sizeOutOfStock
-                                ? 'border-border bg-muted text-muted-foreground cursor-not-allowed opacity-50'
-                                : 'border-border bg-background text-foreground hover:border-muted-foreground'
+                                  ? 'border-border bg-muted text-muted-foreground cursor-not-allowed opacity-50'
+                                  : 'border-border bg-background text-foreground hover:border-muted-foreground'
                             }`}
                           >
                             {size?.toUpperCase()}
@@ -293,7 +316,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-foreground">Cantidad</label>
                 <span className="text-sm text-muted-foreground">
-                  Stock: <span className="font-medium text-foreground">{currentStock}</span> {currentStock === 1 ? 'unidad' : 'unidades'}
+                  Stock: <span className="font-medium text-foreground">{currentStock}</span>{' '}
+                  {currentStock === 1 ? 'unidad' : 'unidades'}
                 </span>
               </div>
 
@@ -323,7 +347,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             </div>
 
             {/* Add to Cart */}
-            <div className="space-y-3 pt-2">
+            <div className="pt-2">
               <Button
                 onClick={handleAddToCart}
                 disabled={isOutOfStock || (product.productType === 'variable' && !selectedVariant)}
@@ -331,19 +355,10 @@ export function ProductDetail({ product }: ProductDetailProps) {
                 size="lg"
               >
                 <ShoppingCart className="w-5 h-5 mr-2" />
-                {isOutOfStock ? 'Sin Stock' : `Agregar - ${formatPrice((selectedVariant?.price || product.price) * quantity)}`}
+                {isOutOfStock
+                  ? 'Sin Stock'
+                  : `Agregar - ${formatPrice((selectedVariant?.price || product.price) * quantity)}`}
               </Button>
-
-              <div className="flex gap-2">
-                <Button variant="outline" className="flex-1 h-11" size="sm">
-                  <Heart className="w-4 h-4 mr-2" />
-                  Favoritos
-                </Button>
-                <Button variant="outline" className="flex-1 h-11" size="sm">
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Compartir
-                </Button>
-              </div>
             </div>
 
             {/* Features */}
@@ -379,92 +394,31 @@ export function ProductDetail({ product }: ProductDetailProps) {
           </div>
         </div>
 
-        {/* Product Details Tabs */}
+        {/* Product Description */}
         <div className="mt-16 mb-8">
-          <Tabs defaultValue="description" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 h-auto">
-              <TabsTrigger value="description" className="py-3">Descripción</TabsTrigger>
-              <TabsTrigger value="specs" className="py-3">Especificaciones</TabsTrigger>
-            </TabsList>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-foreground">Descripción</h2>
+          </div>
 
-            <TabsContent value="description" className="mt-6">
-              <Card className="p-6 border">
-                <div
-                  className="prose prose-sm max-w-none text-muted-foreground"
-                  dangerouslySetInnerHTML={{ __html: product.description }}
-                />
+          <Card className="p-6 border">
+            <div
+              className="prose prose-sm max-w-none text-muted-foreground"
+              dangerouslySetInnerHTML={{ __html: product.description }}
+            />
 
-                {product.tags && product.tags.length > 0 && (
-                  <div className="mt-6 pt-6 border-t">
-                    <h4 className="font-medium text-foreground mb-3">Etiquetas:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {product.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="specs" className="mt-6">
-              <Card className="p-6 border">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-4">Información del Producto</h4>
-                    <dl className="space-y-3 text-sm">
-                      <div className="flex justify-between pb-2 border-b">
-                        <dt className="font-medium text-foreground">SKU:</dt>
-                        <dd className="text-muted-foreground">{selectedVariant?.sku || product.sku || 'N/A'}</dd>
-                      </div>
-                      <div className="flex justify-between pb-2 border-b">
-                        <dt className="font-medium text-foreground">Categoría:</dt>
-                        <dd className="text-muted-foreground">{product.category.name}</dd>
-                      </div>
-                      <div className="flex justify-between pb-2 border-b">
-                        <dt className="font-medium text-foreground">Tipo:</dt>
-                        <dd className="text-muted-foreground">{product.productType === 'simple' ? 'Producto Simple' : 'Producto con Variantes'}</dd>
-                      </div>
-                      <div className="flex justify-between pb-2">
-                        <dt className="font-medium text-foreground">Stock:</dt>
-                        <dd className="text-muted-foreground">{currentStock} {currentStock === 1 ? 'unidad' : 'unidades'}</dd>
-                      </div>
-                    </dl>
-                  </div>
-
-                  {product.productType === 'variable' && selectedVariant && (
-                    <div>
-                      <h4 className="font-semibold text-foreground mb-4">Variante Seleccionada</h4>
-                      <dl className="space-y-3 text-sm">
-                        {selectedVariant.color && (
-                          <div className="flex justify-between pb-2 border-b">
-                            <dt className="font-medium text-foreground">Color:</dt>
-                            <dd className="text-muted-foreground">{selectedVariant.color}</dd>
-                          </div>
-                        )}
-                        {selectedVariant.size && (
-                          <div className="flex justify-between pb-2 border-b">
-                            <dt className="font-medium text-foreground">Talla:</dt>
-                            <dd className="text-muted-foreground">{selectedVariant.size.toUpperCase()}</dd>
-                          </div>
-                        )}
-                        <div className="flex justify-between pb-2 border-b">
-                          <dt className="font-medium text-foreground">Precio:</dt>
-                          <dd className="text-muted-foreground">{formatPrice(selectedVariant.price)}</dd>
-                        </div>
-                        <div className="flex justify-between pb-2">
-                          <dt className="font-medium text-foreground">Stock:</dt>
-                          <dd className="text-muted-foreground">{selectedVariant.stock} {selectedVariant.stock === 1 ? 'unidad' : 'unidades'}</dd>
-                        </div>
-                      </dl>
-                    </div>
-                  )}
+            {product.tags && product.tags.length > 0 && (
+              <div className="mt-6 pt-6 border-t">
+                <h4 className="font-medium text-foreground mb-3">Etiquetas:</h4>
+                <div className="flex flex-wrap gap-2">
+                  {product.tags.map((tag) => (
+                    <Badge key={tag} variant="outline" className="text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
                 </div>
-              </Card>
-            </TabsContent>
-          </Tabs>
+              </div>
+            )}
+          </Card>
         </div>
       </div>
     </div>

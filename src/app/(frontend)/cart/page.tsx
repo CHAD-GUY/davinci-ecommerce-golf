@@ -89,281 +89,277 @@ export default function CartPage() {
 
   if (cart.items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="text-center">
-            <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-6" />
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Tu carrito está vacío</h1>
-            <p className="text-gray-600 mb-8">Parece que aún no has agregado productos a tu carrito</p>
-            <Button asChild size="lg">
-              <Link href="/products">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Continuar Comprando
-              </Link>
-            </Button>
-          </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-6" />
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Tu carrito está vacío</h1>
+          <p className="text-gray-600 mb-8">
+            Parece que aún no has agregado productos a tu carrito
+          </p>
+          <Button asChild size="lg">
+            <Link href="/products">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Continuar Comprando
+            </Link>
+          </Button>
         </div>
+      </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-4 py-8">
-          {/* Header */}
-          <div className="mb-8">
-            <Link href="/products" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Continuar Comprando
-            </Link>
-            <h1 className="text-3xl font-bold text-gray-900">Carrito de Compras</h1>
-            <p className="text-gray-600">
-              {cart.itemCount} {cart.itemCount === 1 ? 'producto' : 'productos'} en tu carrito
-            </p>
-          </div>
+    <div className="min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <Link
+            href="/products"
+            className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Continuar Comprando
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-900">Carrito de Compras</h1>
+          <p className="text-gray-600">
+            {cart.itemCount} {cart.itemCount === 1 ? 'producto' : 'productos'} en tu carrito
+          </p>
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Cart Items */}
-            <div className="lg:col-span-8">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="space-y-6">
-                    {cart.items.map((item, index) => (
-                      <div key={item.id}>
-                        <div className="flex gap-4">
-                          {/* Product Image */}
-                          <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                            <img
-                              src={item.image || '/placeholder-product.jpg'}
-                              alt={item.name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Cart Items */}
+          <div className="lg:col-span-8">
+            <Card>
+              <CardContent className="p-6">
+                <div className="space-y-6">
+                  {cart.items.map((item, index) => (
+                    <div key={item.id}>
+                      <div className="flex gap-4">
+                        {/* Product Image */}
+                        <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                          <img
+                            src={item.image || '/placeholder-product.jpg'}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
 
-                          {/* Product Info */}
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-medium text-gray-900 mb-1">
-                              {item.name}
-                            </h3>
-                            
-                            {item.variant && (
-                              <div className="flex gap-2 mb-2">
-                                {item.variant.color && (
-                                  <Badge variant="outline" className="text-xs">
-                                    {item.variant.color}
-                                  </Badge>
-                                )}
-                                {item.variant.size && (
-                                  <Badge variant="outline" className="text-xs">
-                                    Talla: {item.variant.size.toUpperCase()}
-                                  </Badge>
-                                )}
-                              </div>
-                            )}
+                        {/* Product Info */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-medium text-gray-900 mb-1">{item.name}</h3>
 
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                {/* Quantity Controls */}
-                                <div className="flex items-center gap-1 border rounded-lg">
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="w-8 h-8 p-0"
-                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                  >
-                                    <Minus className="w-3 h-3" />
-                                  </Button>
-                                  <span className="w-12 text-center text-sm font-medium">
-                                    {item.quantity}
-                                  </span>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="w-8 h-8 p-0"
-                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                  >
-                                    <Plus className="w-3 h-3" />
-                                  </Button>
-                                </div>
+                          {item.variant && (
+                            <div className="flex gap-2 mb-2">
+                              {item.variant.color && (
+                                <Badge variant="outline" className="text-xs">
+                                  {item.variant.color}
+                                </Badge>
+                              )}
+                              {item.variant.size && (
+                                <Badge variant="outline" className="text-xs">
+                                  Talla: {item.variant.size.toUpperCase()}
+                                </Badge>
+                              )}
+                            </div>
+                          )}
 
-                                {/* Remove Button */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              {/* Quantity Controls */}
+                              <div className="flex items-center gap-1 border rounded-lg">
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                                  onClick={() => removeItem(item.id)}
+                                  className="w-8 h-8 p-0"
+                                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                 >
-                                  <Trash2 className="w-4 h-4" />
+                                  <Minus className="w-3 h-3" />
+                                </Button>
+                                <span className="w-12 text-center text-sm font-medium">
+                                  {item.quantity}
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="w-8 h-8 p-0"
+                                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                >
+                                  <Plus className="w-3 h-3" />
                                 </Button>
                               </div>
 
-                              {/* Price */}
-                              <div className="text-right">
-                                <div className="font-semibold text-gray-900">
-                                  {formatPrice(item.price * item.quantity)}
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                  {formatPrice(item.price)} c/u
-                                </div>
+                              {/* Remove Button */}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                onClick={() => removeItem(item.id)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+
+                            {/* Price */}
+                            <div className="text-right">
+                              <div className="font-semibold text-gray-900">
+                                {formatPrice(item.price * item.quantity)}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {formatPrice(item.price)} c/u
                               </div>
                             </div>
                           </div>
                         </div>
-                        
-                        {index < cart.items.length - 1 && <Separator className="mt-6" />}
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
 
-            {/* Order Summary */}
-            <div className="lg:col-span-4">
-              <Card className="sticky top-8">
-                <CardHeader>
-                  <CardTitle>Resumen del Pedido</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Subtotal */}
-                  <div className="flex justify-between text-sm">
-                    <span>Subtotal ({cart.itemCount} productos)</span>
-                    <span>{formatPrice(cart.total)}</span>
-                  </div>
+                      {index < cart.items.length - 1 && <Separator className="mt-6" />}
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-                  {/* Coupon Section */}
-                  {cart.coupon ? (
-                    <div className="bg-green-50 p-3 rounded-lg">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <Tag className="w-4 h-4 text-green-600" />
-                          <span className="text-sm font-medium text-green-800">
-                            Cupón: {cart.coupon.code}
-                          </span>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleRemoveCoupon}
-                          className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
-                        >
-                          <X className="w-4 h-4" />
-                        </Button>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-green-700">
-                          Descuento
-                          {cart.coupon.discountType === 'percentage' && ` (${cart.coupon.discountValue}%)`}
-                          {cart.coupon.discountType === 'free_shipping' && ' (Envío gratis)'}
-                        </span>
-                        <span className="font-medium text-green-800">
-                          {cart.coupon.discountType !== 'free_shipping'
-                            ? `-${formatPrice(discountAmount)}`
-                            : 'Aplicado'
-                          }
+          {/* Order Summary */}
+          <div className="lg:col-span-4">
+            <Card className="sticky top-8">
+              <CardHeader>
+                <CardTitle>Resumen del Pedido</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Subtotal */}
+                <div className="flex justify-between text-sm">
+                  <span>Subtotal ({cart.itemCount} productos)</span>
+                  <span>{formatPrice(cart.total)}</span>
+                </div>
+
+                {/* Coupon Section */}
+                {cart.coupon ? (
+                  <div className="bg-green-50 p-3 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Tag className="w-4 h-4 text-green-600" />
+                        <span className="text-sm font-medium text-green-800">
+                          Cupón: {cart.coupon.code}
                         </span>
                       </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleRemoveCoupon}
+                        className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
                     </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">¿Tenés un cupón?</label>
-                      <div className="flex gap-2">
-                        <Input
-                          type="text"
-                          placeholder="Código de cupón"
-                          value={couponCode}
-                          onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                          onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
-                          className="uppercase"
-                        />
-                        <Button
-                          onClick={handleApplyCoupon}
-                          disabled={isApplyingCoupon || !couponCode.trim()}
-                          variant="outline"
-                        >
-                          {isApplyingCoupon ? 'Aplicando...' : 'Aplicar'}
-                        </Button>
-                      </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-green-700">
+                        Descuento
+                        {cart.coupon.discountType === 'percentage' &&
+                          ` (${cart.coupon.discountValue}%)`}
+                        {cart.coupon.discountType === 'free_shipping' && ' (Envío gratis)'}
+                      </span>
+                      <span className="font-medium text-green-800">
+                        {cart.coupon.discountType !== 'free_shipping'
+                          ? `-${formatPrice(discountAmount)}`
+                          : 'Aplicado'}
+                      </span>
                     </div>
-                  )}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">¿Tenés un cupón?</label>
+                    <div className="flex gap-2">
+                      <Input
+                        type="text"
+                        placeholder="Código de cupón"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                        onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                        className="uppercase"
+                      />
+                      <Button
+                        onClick={handleApplyCoupon}
+                        disabled={isApplyingCoupon || !couponCode.trim()}
+                        variant="outline"
+                      >
+                        {isApplyingCoupon ? 'Aplicando...' : 'Aplicar'}
+                      </Button>
+                    </div>
+                  </div>
+                )}
 
-                  {/* Shipping */}
-                  <div className="flex justify-between text-sm">
-                    <span>Envío</span>
-                    <div className="text-right">
-                      {isFreeShipping ? (
-                        <div>
-                          <Badge variant="secondary" className="text-xs mb-1">¡Gratis!</Badge>
-                          <div className="text-xs text-gray-500">
-                            {cart.coupon?.discountType === 'free_shipping'
-                              ? 'Por cupón'
-                              : 'Por compra superior a $50,000'
-                            }
-                          </div>
+                {/* Shipping */}
+                <div className="flex justify-between text-sm">
+                  <span>Envío</span>
+                  <div className="text-right">
+                    {isFreeShipping ? (
+                      <div>
+                        <Badge variant="secondary" className="text-xs mb-1">
+                          ¡Gratis!
+                        </Badge>
+                        <div className="text-xs text-gray-500">
+                          {cart.coupon?.discountType === 'free_shipping'
+                            ? 'Por cupón'
+                            : 'Por compra superior a $50,000'}
                         </div>
-                      ) : (
-                        <div>
-                          <span>{formatPrice(shippingCost)}</span>
-                          <div className="text-xs text-gray-500">
-                            Envío gratis desde $50,000
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Tax */}
-                  <div className="flex justify-between text-sm">
-                    <span>IVA (21%)</span>
-                    <span>{formatPrice(tax)}</span>
-                  </div>
-
-                  <Separator />
-
-                  {/* Total */}
-                  <div className="flex justify-between text-lg font-semibold">
-                    <span>Total</span>
-                    <span>{formatPrice(finalTotal)}</span>
-                  </div>
-
-                  {/* Progress to Free Shipping */}
-                  {cart.total < 50000 && !cart.coupon && (
-                    <div className="bg-blue-50 p-3 rounded-lg">
-                      <div className="text-sm text-blue-800 mb-2">
-                        Agrega {formatPrice(50000 - cart.total)} más para obtener envío gratis
                       </div>
-                      <div className="w-full bg-blue-200 rounded-full h-2">
-                        <div
-                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${(cart.total / 50000) * 100}%` }}
-                        ></div>
+                    ) : (
+                      <div>
+                        <span>{formatPrice(shippingCost)}</span>
+                        <div className="text-xs text-gray-500">Envío gratis desde $50,000</div>
                       </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Tax */}
+                <div className="flex justify-between text-sm">
+                  <span>IVA (21%)</span>
+                  <span>{formatPrice(tax)}</span>
+                </div>
+
+                <Separator />
+
+                {/* Total */}
+                <div className="flex justify-between text-lg font-semibold">
+                  <span>Total</span>
+                  <span>{formatPrice(finalTotal)}</span>
+                </div>
+
+                {/* Progress to Free Shipping */}
+                {cart.total < 50000 && !cart.coupon && (
+                  <div className="bg-blue-50 p-3 rounded-lg">
+                    <div className="text-sm text-blue-800 mb-2">
+                      Agrega {formatPrice(50000 - cart.total)} más para obtener envío gratis
                     </div>
-                  )}
-
-                  {/* Checkout Button */}
-                  <Button asChild className="w-full" size="lg">
-                    <Link href="/checkout">
-                      Proceder al Checkout
-                    </Link>
-                  </Button>
-
-                  {/* Continue Shopping */}
-                  <Button variant="outline" className="w-full" asChild>
-                    <Link href="/products">
-                      Continuar Comprando
-                    </Link>
-                  </Button>
-
-                  {/* Security Badge */}
-                  <div className="text-center pt-4">
-                    <div className="text-xs text-gray-500">
-                      🔒 Compra 100% segura
+                    <div className="w-full bg-blue-200 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                        style={{ width: `${(cart.total / 50000) * 100}%` }}
+                      ></div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                )}
+
+                {/* Checkout Button */}
+                <Button asChild className="w-full" size="lg">
+                  <Link href="/checkout">Proceder al Checkout</Link>
+                </Button>
+
+                {/* Continue Shopping */}
+                <Button variant="outline" className="w-full" asChild>
+                  <Link href="/products">Continuar Comprando</Link>
+                </Button>
+
+                {/* Security Badge */}
+                <div className="text-center pt-4">
+                  <div className="text-xs text-gray-500">🔒 Compra 100% segura</div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
+    </div>
   )
 }

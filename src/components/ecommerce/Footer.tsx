@@ -55,9 +55,9 @@ export function Footer() {
           <div className="relative px-[25px] h-screen flex flex-col justify-end">
             {/* Header */}
             <div className="flex justify-between w-full py-[25px]">
-              <p className="uppercase tracking-[-0.01em] text-base">MNR Studio®</p>
-              <p className="uppercase tracking-[-0.01em] text-base">Work, Infos</p>
-              <p className="uppercase tracking-[-0.01em] text-base">05:05</p>
+              <p className="uppercase tracking-[-0.01em] text-base">Davinci Store®</p>
+              <p className="uppercase tracking-[-0.01em] text-base">Shop, About</p>
+              <p className="uppercase tracking-[-0.01em] text-base">New Arrivals</p>
               <p className="uppercase tracking-[-0.01em] text-base">Contact</p>
             </div>
 
@@ -65,14 +65,14 @@ export function Footer() {
               {/* Line 1 */}
               <div className="flex items-center justify-between">
                 <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase -ml-[0.07em]">
-                  Fancy a cool
+                  Ready to
                 </p>
               </div>
 
               {/* Line 2 */}
               <div className="flex items-center justify-between">
                 <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase -ml-[0.07em]">
-                  Hello
+                  Elevate your
                 </p>
                 <img
                   className="w-[11.2vw] aspect-[1.5] object-cover -translate-y-[5%] rounded-[0.5vw]"
@@ -80,7 +80,7 @@ export function Footer() {
                   alt=""
                 />
                 <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase">
-                  website?
+                  style?
                 </p>
               </div>
 
@@ -101,7 +101,7 @@ export function Footer() {
                 </svg>
 
                 <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase">
-                  @mnr.studio
+                  Shop now
                 </p>
               </div>
             </div>
@@ -109,11 +109,11 @@ export function Footer() {
             {/* Footer */}
             <div className="relative flex justify-between w-full py-[25px] mt-[50px] border-t border-background/50">
               <p className="uppercase tracking-[-0.01em] text-base text-background/50">Instagram</p>
-              <p className="uppercase tracking-[-0.01em] text-base text-background/50">Bluesky</p>
+              <p className="uppercase tracking-[-0.01em] text-base text-background/50">Facebook</p>
               <p className="uppercase tracking-[-0.01em] text-base text-background/50">
-                (212) 555 7890
+                info@davinci.com
               </p>
-              <p className="uppercase tracking-[-0.01em] text-base text-background/50">København</p>
+              <p className="uppercase tracking-[-0.01em] text-base text-background/50">Buenos Aires</p>
             </div>
           </div>
 
@@ -135,9 +135,9 @@ export function Footer() {
           >
             {/* Header */}
             <div className="flex justify-between w-full py-[25px]">
-              <p className="uppercase tracking-[-0.01em] text-base">MNR Studio®</p>
-              <p className="uppercase tracking-[-0.01em] text-base">Work, Infos</p>
-              <p className="uppercase tracking-[-0.01em] text-base">05:05</p>
+              <p className="uppercase tracking-[-0.01em] text-base">Davinci Store®</p>
+              <p className="uppercase tracking-[-0.01em] text-base">Shop, About</p>
+              <p className="uppercase tracking-[-0.01em] text-base">New Arrivals</p>
               <p className="uppercase tracking-[-0.01em] text-base">Contact</p>
             </div>
 
@@ -145,14 +145,14 @@ export function Footer() {
               {/* Line 1 */}
               <div className="flex items-center justify-between">
                 <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase -ml-[0.07em]">
-                  Fancy a cool
+                  Ready to
                 </p>
               </div>
 
               {/* Line 2 */}
               <div className="flex items-center justify-between">
                 <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase -ml-[0.07em]">
-                  Hello
+                  Elevate your
                 </p>
                 <img
                   className="w-[11.2vw] aspect-[1.5] object-cover -translate-y-[5%] rounded-[0.5vw]"
@@ -160,7 +160,7 @@ export function Footer() {
                   alt=""
                 />
                 <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase">
-                  website?
+                  style?
                 </p>
               </div>
 
@@ -181,7 +181,7 @@ export function Footer() {
                 </svg>
 
                 <p className="font-medium text-[10.5vw] leading-[0.9] tracking-[-0.05em] uppercase">
-                  @mnr.studio
+                  Shop now
                 </p>
               </div>
             </div>
@@ -189,11 +189,11 @@ export function Footer() {
             {/* Footer */}
             <div className="relative flex justify-between w-full py-[25px] mt-[50px] border-t border-[#8B5B29]/50">
               <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">Instagram</p>
-              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">Bluesky</p>
+              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">Facebook</p>
               <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">
-                (212) 555 7890
+                info@davinci.com
               </p>
-              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">København</p>
+              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">Buenos Aires</p>
             </div>
           </div>
         </div>

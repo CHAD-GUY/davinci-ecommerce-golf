@@ -14,6 +14,8 @@ import { Categories } from './collections/Categories'
 import { Products } from './collections/Products'
 import { Orders } from './collections/Orders'
 import { Coupons } from './collections/Coupons'
+import { SiteSettings } from './globals/SiteSettings'
+import { Home } from './globals/Home'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,6 +28,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Categories, Products, Orders, Coupons],
+  globals: [SiteSettings, Home],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

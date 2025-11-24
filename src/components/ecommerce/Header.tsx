@@ -2,27 +2,44 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useCart } from '@/contexts/CartContext'
 import { Menu, X, ShoppingBag } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { SplitTextLink } from './SplitTextLink'
+import type { Media } from '@/payload-types'
 
-export function Header() {
+interface HeaderProps {
+  logo?: Media
+  siteName?: string
+}
+
+export function Header({ logo, siteName }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false)
   const { cart, itemCount } = useCart()
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex items-center justify-center">
       <div className="container flex h-16 items-center justify-between px-4">
         {/* Logo */}
-        <Link href="/" className="font-bold text-xl tracking-tight hover:opacity-80 transition-opacity">
-          Davinci Store
+        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          {logo?.url ? (
+            <Image
+              src={logo.url}
+              alt={siteName || 'Logo'}
+              width={120}
+              height={40}
+              className="h-8 w-auto object-contain"
+              priority
+            />
+          ) : (
+            <span className="font-bold text-xl tracking-tight">{siteName || 'Davinci Store'}</span>
+          )}
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="/products" className="text-sm font-medium hover:underline underline-offset-4">
-            Productos
-          </Link>
+          <SplitTextLink href="/products" text="Products" className="text-sm font-medium" />
         </nav>
 
         {/* Actions */}

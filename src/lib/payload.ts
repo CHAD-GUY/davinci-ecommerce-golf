@@ -145,3 +145,27 @@ export async function getCoupons() {
 
   return result
 }
+
+// Get site settings
+export async function getSiteSettings() {
+  const payload = await getPayloadClient()
+
+  const result = await payload.findGlobal({
+    slug: 'site-settings',
+    depth: 2, // Include media relationships
+  })
+
+  return result
+}
+
+// Get home page content
+export async function getHomeContent() {
+  const payload = await getPayloadClient()
+
+  const result = await payload.findGlobal({
+    slug: 'home',
+    depth: 2, // Include media relationships
+  })
+
+  return result
+}

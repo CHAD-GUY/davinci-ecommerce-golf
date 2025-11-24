@@ -94,8 +94,14 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+    home: Home;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    home: HomeSelect<false> | HomeSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -691,6 +697,312 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  /**
+   * Nombre del sitio web
+   */
+  siteName: string;
+  /**
+   * Descripción general del sitio
+   */
+  siteDescription: string;
+  /**
+   * URL completa del sitio (sin / al final)
+   */
+  siteUrl: string;
+  /**
+   * Email de contacto principal
+   */
+  contactEmail?: string | null;
+  /**
+   * Teléfono de contacto
+   */
+  contactPhone?: string | null;
+  /**
+   * Logo principal del sitio (recomendado: PNG con fondo transparente)
+   */
+  logo: number | Media;
+  /**
+   * Logo para modo oscuro (opcional)
+   */
+  logoDark?: (number | null) | Media;
+  /**
+   * Favicon del sitio (recomendado: ICO, PNG o SVG, 32x32px o mayor)
+   */
+  favicon: number | Media;
+  /**
+   * Icono para dispositivos Apple (recomendado: PNG 180x180px)
+   */
+  appleTouchIcon?: (number | null) | Media;
+  /**
+   * Título SEO por defecto (si está vacío, usa siteName)
+   */
+  metaTitle?: string | null;
+  /**
+   * Descripción SEO por defecto (máx. 160 caracteres)
+   */
+  metaDescription?: string | null;
+  /**
+   * Palabras clave separadas por comas
+   */
+  metaKeywords?: string | null;
+  /**
+   * Autor del sitio
+   */
+  metaAuthor?: string | null;
+  /**
+   * Título para redes sociales (si está vacío, usa metaTitle o siteName)
+   */
+  ogTitle?: string | null;
+  /**
+   * Descripción para redes sociales
+   */
+  ogDescription?: string | null;
+  /**
+   * Imagen para compartir en redes sociales (recomendado: 1200x630px)
+   */
+  ogImage?: (number | null) | Media;
+  /**
+   * Tipo de contenido Open Graph
+   */
+  ogType?: ('website' | 'article' | 'product') | null;
+  /**
+   * Tipo de tarjeta de Twitter/X
+   */
+  twitterCard?: ('summary' | 'summary_large_image' | 'app' | 'player') | null;
+  /**
+   * Usuario de Twitter/X (ej: @davincistore)
+   */
+  twitterHandle?: string | null;
+  /**
+   * Google Analytics Measurement ID (ej: G-XXXXXXXXXX)
+   */
+  googleAnalyticsId?: string | null;
+  /**
+   * Google Tag Manager ID (ej: GTM-XXXXXXX)
+   */
+  googleTagManagerId?: string | null;
+  /**
+   * Facebook Pixel ID
+   */
+  facebookPixelId?: string | null;
+  /**
+   * Código de verificación de Google Search Console
+   */
+  googleSiteVerification?: string | null;
+  /**
+   * Nombre de la organización para Schema.org
+   */
+  organizationName?: string | null;
+  /**
+   * Logo de la organización (se usará para JSON-LD)
+   */
+  organizationLogo?: (number | null) | Media;
+  /**
+   * Perfiles de redes sociales para Schema.org
+   */
+  socialProfiles?:
+    | {
+        platform: 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'youtube' | 'tiktok';
+        /**
+         * URL completa del perfil
+         */
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home".
+ */
+export interface Home {
+  id: number;
+  heroTitle: string;
+  heroSubtitle?: string | null;
+  heroMediaType: 'image' | 'video';
+  /**
+   * Imagen de fondo para el hero (recomendado: 1920x1080px)
+   */
+  heroImage?: (number | null) | Media;
+  /**
+   * Video de fondo para el hero (formato: MP4, WebM)
+   */
+  heroVideo?: (number | null) | Media;
+  /**
+   * Imagen de respaldo para dispositivos que no soporten video
+   */
+  heroVideoFallback?: (number | null) | Media;
+  heroCTA?: {
+    text?: string | null;
+    link?: string | null;
+  };
+  videoSections?:
+    | {
+        title: string;
+        description?: string | null;
+        /**
+         * Video principal (MP4, WebM)
+         */
+        video: number | Media;
+        /**
+         * Imagen de vista previa del video
+         */
+        thumbnail?: (number | null) | Media;
+        /**
+         * URL de video externo (YouTube, Vimeo) - opcional, si se usa esto se ignora el video subido
+         */
+        videoUrl?: string | null;
+        layout?: ('full' | 'video-left' | 'video-right') | null;
+        cta?: {
+          text?: string | null;
+          link?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  featuredProductsTitle?: string | null;
+  featuredProductsSubtitle?: string | null;
+  /**
+   * Mostrar sección de productos destacados (se mostrarán automáticamente los productos marcados como destacados)
+   */
+  showFeaturedProducts?: boolean | null;
+  /**
+   * Cantidad de productos destacados a mostrar
+   */
+  featuredProductsLimit?: number | null;
+  ctaSections?:
+    | {
+        title: string;
+        description?: string | null;
+        backgroundImage?: (number | null) | Media;
+        /**
+         * Color de fondo en formato HEX (ej: #000000) - se usa si no hay imagen
+         */
+        backgroundColor?: string | null;
+        textColor?: ('dark' | 'light') | null;
+        buttons?:
+          | {
+              text: string;
+              link: string;
+              variant?: ('default' | 'secondary' | 'outline') | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  siteDescription?: T;
+  siteUrl?: T;
+  contactEmail?: T;
+  contactPhone?: T;
+  logo?: T;
+  logoDark?: T;
+  favicon?: T;
+  appleTouchIcon?: T;
+  metaTitle?: T;
+  metaDescription?: T;
+  metaKeywords?: T;
+  metaAuthor?: T;
+  ogTitle?: T;
+  ogDescription?: T;
+  ogImage?: T;
+  ogType?: T;
+  twitterCard?: T;
+  twitterHandle?: T;
+  googleAnalyticsId?: T;
+  googleTagManagerId?: T;
+  facebookPixelId?: T;
+  googleSiteVerification?: T;
+  organizationName?: T;
+  organizationLogo?: T;
+  socialProfiles?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home_select".
+ */
+export interface HomeSelect<T extends boolean = true> {
+  heroTitle?: T;
+  heroSubtitle?: T;
+  heroMediaType?: T;
+  heroImage?: T;
+  heroVideo?: T;
+  heroVideoFallback?: T;
+  heroCTA?:
+    | T
+    | {
+        text?: T;
+        link?: T;
+      };
+  videoSections?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        video?: T;
+        thumbnail?: T;
+        videoUrl?: T;
+        layout?: T;
+        cta?:
+          | T
+          | {
+              text?: T;
+              link?: T;
+            };
+        id?: T;
+      };
+  featuredProductsTitle?: T;
+  featuredProductsSubtitle?: T;
+  showFeaturedProducts?: T;
+  featuredProductsLimit?: T;
+  ctaSections?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        backgroundImage?: T;
+        backgroundColor?: T;
+        textColor?: T;
+        buttons?:
+          | T
+          | {
+              text?: T;
+              link?: T;
+              variant?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

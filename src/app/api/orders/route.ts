@@ -27,6 +27,68 @@ export async function POST(request: NextRequest) {
 
     const payload = await getPayloadClient()
 
+    // Update stock for each item BEFORE creating the order
+    for (const item of items) {
+      try {
+        // Get the product
+        const product = await payload.findByID({
+          collection: 'products',
+          id: item.productId,
+        })
+
+        if (!product) {
+          console.error(`Product not found: ${item.productId}`)
+          continue
+        }
+
+        // If product has variants
+        if (product.productType === 'variable' && item.variant) {
+          const variantId = item.variant.id
+
+          // Find the variant in the product
+          const variantIndex = product.variants?.findIndex((v: any) => v.id === variantId)
+
+          if (variantIndex !== undefined && variantIndex !== -1 && product.variants) {
+            const variant = product.variants[variantIndex]
+            const newStock = Math.max(0, (variant.stock || 0) - item.quantity)
+
+            // Update the variant stock
+            const updatedVariants = [...product.variants]
+            updatedVariants[variantIndex] = {
+              ...variant,
+              stock: newStock,
+            }
+
+            await payload.update({
+              collection: 'products',
+              id: item.productId,
+              data: {
+                variants: updatedVariants,
+              },
+            })
+
+            console.log(`Updated variant stock for product ${item.productId}, variant ${variantId}: ${variant.stock} -> ${newStock}`)
+          }
+        } else if (product.productType === 'simple') {
+          // Simple product - update simpleStock
+          const newStock = Math.max(0, (product.simpleStock || 0) - item.quantity)
+
+          await payload.update({
+            collection: 'products',
+            id: item.productId,
+            data: {
+              simpleStock: newStock,
+            },
+          })
+
+          console.log(`Updated simple product stock for ${item.productId}: ${product.simpleStock} -> ${newStock}`)
+        }
+      } catch (stockError) {
+        console.error(`Error updating stock for product ${item.productId}:`, stockError)
+        // Continue with order creation even if stock update fails
+      }
+    }
+
     // Transform cart items to order items format
     const orderItems = items.map((item: any) => {
       const orderItem: any = {
