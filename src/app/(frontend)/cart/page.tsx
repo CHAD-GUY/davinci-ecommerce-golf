@@ -49,40 +49,33 @@ export default function CartPage() {
     setIsApplyingCoupon(true)
 
     try {
-      // Simular llamada a API - en producción llamarías a /api/coupons/validate
-      // Por ahora usamos cupones hardcodeados para demo
-      const validCoupons: Record<string, any> = {
-        'BIENVENIDO15': {
-          code: 'BIENVENIDO15',
-          discountType: 'percentage',
-          discountValue: 15,
-          discountAmount: 0, // Se calculará
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        'ENVIOGRATIS': {
-          code: 'ENVIOGRATIS',
-          discountType: 'free_shipping',
-          discountValue: 0,
-          discountAmount: 0,
-        },
-        'DESCUENTO5000': {
-          code: 'DESCUENTO5000',
-          discountType: 'fixed',
-          discountValue: 5000,
-          discountAmount: 0,
-        },
-      }
+        body: JSON.stringify({
+          code: couponCode.toUpperCase(),
+          cartTotal: cart.total,
+        }),
+      })
 
-      const coupon = validCoupons[couponCode.toUpperCase()]
+      const data = await response.json()
 
-      if (!coupon) {
-        toast.error('Cupón inválido o expirado')
+      if (!response.ok) {
+        toast.error(data.error || 'Cupón inválido')
         return
       }
 
-      applyCoupon(coupon)
-      toast.success('¡Cupón aplicado correctamente!')
-      setCouponCode('')
+      if (data.valid && data.coupon) {
+        applyCoupon(data.coupon)
+        toast.success('¡Cupón aplicado correctamente!')
+        setCouponCode('')
+      } else {
+        toast.error('Cupón inválido')
+      }
     } catch (error) {
+      console.error('Error applying coupon:', error)
       toast.error('Error al aplicar el cupón')
     } finally {
       setIsApplyingCoupon(false)
@@ -289,9 +282,6 @@ export default function CartPage() {
                           {isApplyingCoupon ? 'Aplicando...' : 'Aplicar'}
                         </Button>
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        Cupones disponibles: BIENVENIDO15, ENVIOGRATIS, DESCUENTO5000
-                      </p>
                     </div>
                   )}
 
