@@ -1,4 +1,5 @@
 // Simple Lexical to HTML serializer
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function serialize(richText: any): string {
   if (!richText || !richText.root) {
     return ''
@@ -6,6 +7,7 @@ export function serialize(richText: any): string {
 
   const { root } = richText
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function serializeNode(node: any): string {
     if (!node) return ''
 
