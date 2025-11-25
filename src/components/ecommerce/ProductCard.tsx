@@ -140,14 +140,6 @@ export function ProductCard({ product }: ProductCardProps) {
               </span>
             )}
           </div>
-
-          {/* Add to Cart Button */}
-          {product.productType === 'simple' && (
-            <Button onClick={handleAddToCart} disabled={isOutOfStock} className="w-full" size="sm">
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
-            </Button>
-          )}
         </CardContent>
       </Link>
       {/* Badges */}
