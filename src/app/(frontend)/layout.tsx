@@ -31,6 +31,17 @@ export async function generateMetadata(): Promise<Metadata> {
     const ogImageMedia = settings.ogImage as Media | undefined
     const appleTouchIconMedia = settings.appleTouchIcon as Media | undefined
 
+    // Build absolute URLs for images
+    const getAbsoluteUrl = (url: string | undefined) => {
+      if (!url) return undefined
+      if (url.startsWith('http')) return url
+      return `${siteUrl}${url.startsWith('/') ? '' : '/'}${url}`
+    }
+
+    const ogImageUrl = getAbsoluteUrl(ogImageMedia?.url || undefined)
+    const faviconUrl = getAbsoluteUrl(faviconMedia?.url || undefined)
+    const appleTouchIconUrl = getAbsoluteUrl(appleTouchIconMedia?.url || undefined)
+
     const metadata: Metadata = {
       title: {
         default: metaTitle,
@@ -52,12 +63,12 @@ export async function generateMetadata(): Promise<Metadata> {
         siteName,
         title: ogTitle,
         description: ogDescription,
-        images: ogImageMedia
+        images: ogImageUrl
           ? [
               {
-                url: ogImageMedia.url || '',
-                width: 1200,
-                height: 630,
+                url: ogImageUrl,
+                width: ogImageMedia?.width || 1200,
+                height: ogImageMedia?.height || 630,
                 alt: ogTitle,
               },
             ]
@@ -69,12 +80,12 @@ export async function generateMetadata(): Promise<Metadata> {
         description: ogDescription,
         site: settings.twitterHandle,
         creator: settings.twitterHandle,
-        images: ogImageMedia ? [ogImageMedia.url || ''] : undefined,
+        images: ogImageUrl ? [ogImageUrl] : undefined,
       },
       icons: {
-        icon: faviconMedia?.url || '/favicon.ico',
-        shortcut: faviconMedia?.url || '/favicon.ico',
-        apple: appleTouchIconMedia?.url || faviconMedia?.url || '/apple-touch-icon.png',
+        icon: faviconUrl || '/favicon.ico',
+        shortcut: faviconUrl || '/favicon.ico',
+        apple: appleTouchIconUrl || faviconUrl || '/apple-touch-icon.png',
       },
       robots: {
         index: true,
