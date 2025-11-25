@@ -10,9 +10,13 @@ import { getSiteSettings } from '@/lib/payload'
 import type { Metadata } from 'next'
 import type { Media } from '@/payload-types'
 
+// Revalidate every 60 seconds to pick up changes from Payload CMS
+export const revalidate = 60
+
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const settings = await getSiteSettings()
+    console.log(settings)
 
     const siteName = settings.siteName || 'Ecommerce Davinci'
     const siteDescription = settings.siteDescription || 'Tu tienda online de ropa y accesorios'

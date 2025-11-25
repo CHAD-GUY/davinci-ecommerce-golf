@@ -6,6 +6,9 @@ import HorizontalScroll from '@/components/ecommerce/HorizontalScroll'
 import { ProductCard } from '@/components/ecommerce/ProductCard'
 import { VideoSlider } from '@/components/ecommerce/VideoSlider'
 
+// Revalidate every 60 seconds to pick up changes from Payload CMS
+export const revalidate = 60
+
 export default async function Home() {
   const categoriesResult = await getCategories({ limit: 6 })
   const homeContent = await getHomeContent()
