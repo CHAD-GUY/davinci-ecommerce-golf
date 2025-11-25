@@ -41,6 +41,10 @@ export const Products: CollectionConfig = {
       type: 'relationship',
       relationTo: 'categories',
       required: true,
+      hasMany: false,
+      admin: {
+        description: 'Select a category for this product',
+      },
     },
     {
       name: 'images',

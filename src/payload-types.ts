@@ -180,6 +180,9 @@ export interface Category {
   id: number;
   name: string;
   description?: string | null;
+  /**
+   * URL-friendly version of the name
+   */
   slug: string;
   image?: (number | null) | Media;
   updatedAt: string;
@@ -213,6 +216,9 @@ export interface Product {
    */
   compareAtPrice?: number | null;
   slug: string;
+  /**
+   * Select a category for this product
+   */
   category: number | Category;
   images: {
     image: number | Media;

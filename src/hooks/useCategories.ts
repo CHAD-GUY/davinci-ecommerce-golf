@@ -14,7 +14,7 @@ interface CategoriesResponse {
 }
 
 async function fetchCategories(): Promise<CategoriesResponse> {
-  const response = await fetch('/api/categories')
+  const response = await fetch('/api/frontend-categories')
   if (!response.ok) {
     throw new Error('Failed to fetch categories')
   }

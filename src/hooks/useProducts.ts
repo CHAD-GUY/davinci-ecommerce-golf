@@ -29,7 +29,7 @@ async function fetchProducts(category?: string): Promise<ProductsResponse> {
     params.append('category', category)
   }
 
-  const response = await fetch(`/api/products?${params.toString()}`)
+  const response = await fetch(`/api/frontend-products?${params.toString()}`)
   if (!response.ok) {
     throw new Error('Failed to fetch products')
   }
