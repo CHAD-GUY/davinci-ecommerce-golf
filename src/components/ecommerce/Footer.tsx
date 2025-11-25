@@ -48,7 +48,7 @@ export function Footer() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative bg-foreground text-background ">
+    <section ref={sectionRef} className="relative bg-foreground text-background pb-10">
       <div className="relative">
         <div className="relative pointer-events-none">
           {/* Original Container */}
@@ -104,16 +104,6 @@ export function Footer() {
                   Shop now
                 </p>
               </div>
-            </div>
-
-            {/* Footer */}
-            <div className="relative flex justify-between w-full py-[25px] mt-[50px] border-t border-background/50">
-              <p className="uppercase tracking-[-0.01em] text-base text-background/50">Instagram</p>
-              <p className="uppercase tracking-[-0.01em] text-base text-background/50">Facebook</p>
-              <p className="uppercase tracking-[-0.01em] text-base text-background/50">
-                info@davinci.com
-              </p>
-              <p className="uppercase tracking-[-0.01em] text-base text-background/50">Buenos Aires</p>
             </div>
           </div>
 
@@ -184,16 +174,6 @@ export function Footer() {
                   Shop now
                 </p>
               </div>
-            </div>
-
-            {/* Footer */}
-            <div className="relative flex justify-between w-full py-[25px] mt-[50px] border-t border-[#8B5B29]/50">
-              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">Instagram</p>
-              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">Facebook</p>
-              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">
-                info@davinci.com
-              </p>
-              <p className="uppercase tracking-[-0.01em] text-base text-[#8B5B29]/50">Buenos Aires</p>
             </div>
           </div>
         </div>

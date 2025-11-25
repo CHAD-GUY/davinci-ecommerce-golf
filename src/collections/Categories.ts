@@ -14,8 +14,8 @@ export const Categories: CollectionConfig = {
       name: 'name',
       type: 'text',
       required: true,
-      validate: (val: string) => {
-        if (!val || val.trim().length === 0) {
+      validate: (val: unknown) => {
+        if (typeof val !== 'string' || !val || val.trim().length === 0) {
           return 'Category name is required'
         }
         return true

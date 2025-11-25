@@ -162,7 +162,7 @@ export default function CartPage() {
                             </div>
                           )}
 
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-start justify-between flex-col sm:flex-row sm:items-center">
                             <div className="flex items-center gap-3">
                               {/* Quantity Controls */}
                               <div className="flex items-center gap-1 border rounded-lg">
